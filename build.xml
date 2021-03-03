@@ -10,8 +10,8 @@
   <property name="compile.debug"           value="true"/>
   <property name="compile.deprecation"     value="false"/>
   <property name="compile.optimize"        value="false"/>
-  <property name="compile.source"          value="1.6"/>
-  <property name="compile.target"          value="1.6"/>
+  <property name="compile.source"          value="1.7"/>
+  <property name="compile.target"          value="1.7"/>
   <property name="compile.encoding"        value="iso-8859-1"/>
   <property name="compile.nowarn"          value="true"/>
   
@@ -81,6 +81,7 @@
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}"
           encoding="${compile.encoding}"
+ includeantruntime="False"
     		    nowarn="${compile.nowarn}">
           <classpath refid="source.lib" />
     </javac>
