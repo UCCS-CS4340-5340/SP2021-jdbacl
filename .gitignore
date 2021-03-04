@@ -4,6 +4,8 @@
 ### Directories ###
 build/
 bin/
+doc/
+codemr/
 
 ### Java ###
 # Compiled class file
