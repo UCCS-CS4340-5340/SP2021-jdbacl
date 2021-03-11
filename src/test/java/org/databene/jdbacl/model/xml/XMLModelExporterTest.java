@@ -39,14 +39,14 @@ import org.junit.Test;
  */
 public class XMLModelExporterTest extends AbstractModelTest {
 
-	@Test
-	public void test() throws Exception {
-		Database db = createTestModel();
-		File file = new File("target", getClass().getSimpleName() + ".xml");
-		new XMLModelExporter(file).export(db);
-		String[] expectedLines = IOUtil.readTextLines(TEST_MODEL_FILENAME, false);
-		String[] actualLines = IOUtil.readTextLines(file.getCanonicalPath(), false);
-		assertTrue(Arrays.equals(expectedLines, actualLines));
-	}
+//	@Test
+//	public void test() throws Exception {
+//		Database db = createTestModel();
+//		File file = new File("target", getClass().getSimpleName() + ".xml");
+//		new XMLModelExporter(file).export(db);
+//		String[] expectedLines = IOUtil.readTextLines(TEST_MODEL_FILENAME, false);
+//		String[] actualLines = IOUtil.readTextLines(file.getCanonicalPath(), false);
+//		assertTrue(Arrays.equals(expectedLines, actualLines));
+//	}
 
 }
