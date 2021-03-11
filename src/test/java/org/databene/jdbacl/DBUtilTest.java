@@ -37,6 +37,9 @@ import org.databene.jdbacl.dialect.HSQLUtil;
 import org.junit.Test;
 import static junit.framework.Assert.*;
 
+import org.databene.jdbacl.model.DBPrimaryKeyConstraint;
+import org.databene.jdbacl.model.DBUniqueConstraint;
+
 /**
  * Tests the {@link DBUtil} class.<br/><br/>
  * Created at 03.05.2008 15:53:49
@@ -46,7 +49,29 @@ import static junit.framework.Assert.*;
 public class DBUtilTest {
 
 	String SCRIPT_FILE = "org/databene/jdbacl/create_tables.hsql.sql";
-
+	String TEST_ENV = "org/databene/jdbacl/test";
+	
+	@Test
+	// ds-5
+	public void test_environment_exists() 
+	{
+		boolean exists = DBUtil.existsEnvironment(TEST_ENV);
+		assertTrue(exists);
+	}
+	
+	@Test
+	// ds-6
+	public void test_environment_properties() 
+	{
+		JDBCConnectData props = DBUtil.getConnectData(TEST_ENV);
+		assertEquals(props.driver, "test_driver");
+		assertEquals(props.url, "test_url");
+		assertEquals(props.user, "test_user");
+		assertEquals(props.password, "test_password");
+		assertEquals(props.catalog, "test_catalog");
+		assertEquals(props.schema, "test_schema");
+	}
+	
 	@Test
 	public void testRunScript() throws Exception {
 		Connection connection = HSQLUtil.connectInMemoryDB(getClass().getSimpleName());
@@ -58,6 +83,17 @@ public class DBUtilTest {
 		assertTrue(Arrays.equals(ArrayUtil.buildObjectArrayOfType(Object.class, 1, "R&B"), rows[0]));
 		int count = (Integer) DBUtil.queryAndSimplify("select count(*) from T1", connection);
 		assertEquals(1, count);
+	}
+	
+	// Tests that rely on the run script in the above test ------------------------------------------------------------
+	
+	@Test
+	// ds-7
+	public void test_count_rows() throws Exception
+	{
+		Connection connection = HSQLUtil.connectInMemoryDB(getClass().getSimpleName());
+		long rows = DBUtil.countRows("T1", connection);
+		assertEquals(1, rows);
 	}
 	
 	@Test

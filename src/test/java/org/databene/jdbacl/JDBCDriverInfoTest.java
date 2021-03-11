@@ -45,7 +45,30 @@ public class JDBCDriverInfoTest {
 	public void testGetInstances() {
 		assertTrue(JDBCDriverInfo.getInstances().size() > 0);
 	}
-
+	
+	@Test
+	// ds-9
+	public void test_getUrlPrefix()
+	{
+		JDBCDriverInfo hsql = JDBCDriverInfo.HSQL;
+		assertEquals("jdbc:hsqldb:hsql://", hsql.getUrlPrefix());
+	}
+	
+	@Test
+	// ds-10
+	public void test_equals()
+	{
+		JDBCDriverInfo hsql = JDBCDriverInfo.HSQL;
+		JDBCDriverInfo hsql_copy = hsql;
+		JDBCDriverInfo hsql2 = JDBCDriverInfo.HSQL;
+		JDBCDriverInfo firebird = JDBCDriverInfo.FIREBIRD;
+		
+		assertTrue(hsql.equals(hsql_copy));
+		assertTrue(hsql.equals(hsql2));
+		assertFalse(hsql.equals(firebird));
+		assertFalse(hsql.equals(null));
+	}
+	
 	@Test
 	public void testHSQL() {
 		JDBCDriverInfo hsql = JDBCDriverInfo.HSQL;

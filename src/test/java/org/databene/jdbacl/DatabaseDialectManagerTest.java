@@ -29,6 +29,10 @@ import org.databene.jdbacl.dialect.HSQLDialect;
 import org.databene.jdbacl.dialect.OracleDialect;
 import org.junit.Test;
 
+import java.lang.NullPointerException;
+import org.databene.jdbacl.dialect.FirebirdDialect;
+import org.databene.jdbacl.dialect.UnknownDialect;
+
 /**
  * Tests the {@link DatabaseDialectManager}.<br/><br/>
  * Created: 20.10.2011 14:16:04
@@ -36,6 +40,40 @@ import org.junit.Test;
  * @author Volker Bergmann
  */
 public class DatabaseDialectManagerTest {
+	
+	@Test
+	// ds-1
+	public void testBadDialect()
+	{
+		check("adsdf", "1.5.8", UnknownDialect.class);
+		check("", "1.5.8", UnknownDialect.class);
+	}
+	
+	@Test(expected = NullPointerException.class)
+	// ds-2
+	public void testNullDialect()
+	{
+		// Throws on String.toLowerCase() in DatabaseDialectManager.getDialectForProduct()
+		check(null, "1.5.8", UnknownDialect.class);
+	}
+	
+	@Test
+	// ds-3
+	public void testBadVersion()
+	{
+		check("Firebird", "-2.5.8", FirebirdDialect.class);
+		check("Firebird", "abc", FirebirdDialect.class);
+		check("Firebird", "", FirebirdDialect.class);
+		check("Firebird", null, FirebirdDialect.class);
+	}
+	
+	@Test
+	// ds-4
+	public void testNullVersion()
+	{
+		check("Firebird", null, FirebirdDialect.class);
+	}
+
 
 	@Test
 	public void testPlainSettings() {

@@ -30,6 +30,8 @@ import org.databene.script.expression.EqualsExpression;
 import org.databene.script.expression.LogicalComplementExpression;
 import org.junit.Test;
 
+import org.antlr.runtime.CharStream;
+
 /**
  * Tests the {@link SQLParserUtil}.<br/><br/>
  * Created: 07.06.2011 15:35:51
@@ -37,6 +39,7 @@ import org.junit.Test;
  * @author Volker Bergmann
  */
 public class SQLParserUtilTest {
+
 
 	@Test
 	public void testInt() throws Exception {

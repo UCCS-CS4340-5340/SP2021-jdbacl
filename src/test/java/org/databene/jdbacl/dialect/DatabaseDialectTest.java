@@ -32,14 +32,22 @@ import java.util.Date;
 import org.databene.commons.NameUtil;
 import org.databene.commons.StringUtil;
 import org.databene.commons.TimeUtil;
+import org.databene.jdbacl.ColumnInfo;
 import org.databene.jdbacl.DBUtil;
 import org.databene.jdbacl.DatabaseDialect;
 import org.databene.jdbacl.DatabaseTestUtil;
 import org.databene.jdbacl.JDBCConnectData;
+import org.databene.jdbacl.SQLUtil;
 import org.databene.jdbacl.model.DBSequence;
+import org.databene.jdbacl.model.DefaultDBTable;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Vector;
+import org.databene.jdbacl.model.DBSchema;
+import org.databene.jdbacl.model.DBCatalog;
 
 /**
  * Parent class for testing concrete {@link DatabaseDialect} implementations.<br/><br/>
@@ -52,6 +60,9 @@ public abstract class DatabaseDialectTest<E extends DatabaseDialect> {
 	protected Logger logger;
 
 	protected E dialect;
+	
+	protected String insert;
+	protected String update;
 	
 	protected final static Date DATETIME_19710203131415 = TimeUtil.date(1971, 1, 3, 13, 14, 15, 0);
 	protected final static Time TIME_131415 = TimeUtil.time(13, 14, 15, 0);
@@ -69,6 +80,54 @@ public abstract class DatabaseDialectTest<E extends DatabaseDialect> {
 			assertSequenceSupported();
 		else
 			assertSequenceNotSupported();
+	}
+	
+	@Test
+	// ds-11
+	public void testInsert()
+	{
+		getInsert();
+		assertEquals("insert into catalog.schemea.t (column0,column1) values (?,?)", insert);
+	}
+	
+	@Test
+	// ds-12
+	public void testUpdate()
+	{
+		getUpdate();
+		assertEquals("update catalog.schemea.t set column1=? where column0=?", update);
+	}
+	
+	public void getInsert()
+	{
+		DefaultDBTable table = new DefaultDBTable("t");
+		DBSchema schema = new DBSchema("schemea", new DBCatalog("catalog"));
+		table.setSchema(schema);
+		
+		ColumnInfo columnInfo0 = new ColumnInfo("column0", 0, ColumnInfo.class);
+		ColumnInfo columnInfo1 = new ColumnInfo("column1", 1, ColumnInfo.class);
+		List<ColumnInfo> columnInfoList = new Vector<ColumnInfo>();
+		columnInfoList.add(columnInfo0);
+		columnInfoList.add(columnInfo1);
+		
+		insert = dialect.insert(table, columnInfoList);
+	}
+	
+	public void getUpdate()
+	{
+		DefaultDBTable table = new DefaultDBTable("t");
+		DBSchema schema = new DBSchema("schemea", new DBCatalog("catalog"));
+		table.setSchema(schema);
+		
+		String[] pkColumnNames = {"column0"};
+		
+		ColumnInfo columnInfo0 = new ColumnInfo("column0", 0, ColumnInfo.class);
+		ColumnInfo columnInfo1 = new ColumnInfo("column1", 1, ColumnInfo.class);
+		List<ColumnInfo> columnInfoList = new Vector<ColumnInfo>();
+		columnInfoList.add(columnInfo0);
+		columnInfoList.add(columnInfo1);
+		
+		update = dialect.update(table, pkColumnNames, columnInfoList);
 	}
 
 	private void assertSequenceSupported() {

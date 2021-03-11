@@ -123,4 +123,20 @@ public class OracleDialectTest extends DatabaseDialectTest<OracleDialect> {
 				dialect.renderCase("col", "result4", "condition1", "result1", "condition2", "result2"));
 	}
 	
+	@Test
+	// ds-13 (oracle version)
+	public void testInsert()
+	{
+		getInsert();
+		assertEquals("insert into \"catalog\".\"schemea\".\"t\" (\"column0\",\"column1\") values (?,?)", insert);
+	}
+	
+	
+	@Test
+	// ds-14 (oracle version)
+	public void testUpdate()
+	{
+		getUpdate();
+		assertEquals("update \"catalog\".\"schemea\".\"t\" set \"column1\"=? where \"column0\"=?", update);
+	}
 }

@@ -204,7 +204,7 @@ public class SQLUtil {
 		return builder.toString();
     }
     
-    public static String renderWhereClause(String[] columnNames, Object[] values) {
+	public static String renderWhereClause(String[] columnNames, Object[] values) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < columnNames.length; i++) {
 			if (i > 0)

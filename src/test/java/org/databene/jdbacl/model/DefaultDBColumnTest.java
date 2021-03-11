@@ -39,6 +39,42 @@ import static junit.framework.Assert.*;
  * @author Volker Bergmann
  */
 public class DefaultDBColumnTest {
+	
+	@Test
+	// db-19
+	public void test_isIdentical()
+	{
+		DefaultDBColumn column = new DefaultDBColumn("ID", null, DBDataType.getInstance(Types.DECIMAL, "NUMBER"), 11, 2);
+		DefaultDBColumn column_copy = column;
+		DefaultDBColumn column2 = new DefaultDBColumn("ID", null, DBDataType.getInstance(Types.DECIMAL, "NUMBER"), 11, 2);
+		
+		DefaultDBColumn column3 = new DefaultDBColumn("ID", null, DBDataType.getInstance(Types.DECIMAL, "DEC"), 11, 2);
+		DefaultDBColumn column4 = new DefaultDBColumn("ID", null, DBDataType.getInstance(Types.DECIMAL, "NUMBER"), 12, 2);
+		
+		assertTrue(column.isIdentical(column_copy));
+		assertTrue(column.isIdentical(column2));
+		assertFalse(column.isIdentical(column3));
+		assertFalse(column.isIdentical(column4));
+		
+	}
+	
+	@Test
+	// db-20
+	public void test_equals()
+	{
+		DefaultDBColumn column = new DefaultDBColumn("ID", null, DBDataType.getInstance(Types.DECIMAL, "NUMBER"), 11, 2);
+		DefaultDBColumn column_copy = column;
+		DefaultDBColumn column2 = new DefaultDBColumn("ID", null, DBDataType.getInstance(Types.DECIMAL, "NUMBER"), 11, 2);
+		
+		DefaultDBColumn column3 = new DefaultDBColumn("ID", null, DBDataType.getInstance(Types.DECIMAL, "DEC"), 11, 2);
+		DefaultDBColumn column4 = new DefaultDBColumn("ID", null, DBDataType.getInstance(Types.DECIMAL, "NUMBER"), 12, 2);
+		
+		assertTrue(column.isEquivalent(column_copy));
+		assertTrue(column.isEquivalent(column2));
+		assertFalse(column.isEquivalent(column3));
+		assertFalse(column.isEquivalent(column4));
+	}
+
 
 	@Test
     public void testToString() {

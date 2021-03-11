@@ -44,4 +44,20 @@ public class Firebird2_5DialectTest extends DatabaseDialectTest<Firebird2_5Diale
 		assertEquals("code NOT SIMILAR TO '[A-Z]{5}'", dialect.regexQuery("code", true, "[A-Z]{5}"));
 	}
 	
+	@Test
+	// ds-13 (firebird 2.5 version)
+	public void testInsert()
+	{
+		getInsert();
+		assertEquals("insert into \"catalog\".\"schemea\".\"t\" (\"column0\",\"column1\") values (?,?)", insert);
+	}
+	
+	
+	@Test
+	// ds-14 (firebird 2.5 version)
+	public void testUpdate()
+	{
+		getUpdate();
+		assertEquals("update \"catalog\".\"schemea\".\"t\" set \"column1\"=? where \"column0\"=?", update);
+	}
 }

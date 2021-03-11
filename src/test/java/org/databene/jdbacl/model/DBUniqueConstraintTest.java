@@ -38,6 +38,41 @@ import static junit.framework.Assert.*;
  * @author Volker Bergmann
  */
 public class DBUniqueConstraintTest {
+	
+	@Test
+	// ds-17
+	public void test_addColumnName()
+	{
+		DBTable table = new DefaultDBTable("tablename");
+        DBUniqueConstraint constraint = new DBUniqueConstraint(table, "constraintname", false, "column1", "column2");
+        // Check adding a new column
+        constraint.addColumnName("column3");
+        assertEquals("CONSTRAINT constraintname UNIQUE (column1, column2, column3)", constraint.toString());
+        // Check adding an existing column
+        constraint.addColumnName("column2");
+        assertEquals("CONSTRAINT constraintname UNIQUE (column1, column2, column3)", constraint.toString());
+	}
+	
+	@Test
+	// ds-18
+	public void test_isIdentical()
+	{
+		DBTable table = new DefaultDBTable("tablename");
+        DBUniqueConstraint constraint = new DBUniqueConstraint(table, "constraintname", false, "column1", "column2");
+        DBUniqueConstraint constraint_copy = constraint;
+        DBUniqueConstraint constraint2 = new DBUniqueConstraint(table, "constraintname", false, "column1", "column2");
+        
+        DBUniqueConstraint constraint3 = new DBUniqueConstraint(table, "constraintname", false, "column1");
+        DBUniqueConstraint constraint4 = new DBUniqueConstraint(table, "constraintname_diff", false, "column1", "column2");
+        DBTable table2 = new DefaultDBTable("tablename2");
+        DBUniqueConstraint constraint5 = new DBUniqueConstraint(table2, "constraintname", false, "column1", "column2");
+        
+        assertTrue(constraint.isIdentical(constraint_copy)); // Test copy
+        assertTrue(constraint.isIdentical(constraint2)); // Test identical but different instance
+        assertFalse(constraint.isIdentical(constraint3)); // Test same name different columns
+        assertFalse(constraint.isIdentical(constraint4)); // Test same columns different name
+        assertFalse(constraint.isIdentical(constraint5)); // Test same columns and name but different table
+	}
 
 	@Test
     public void testToString() {

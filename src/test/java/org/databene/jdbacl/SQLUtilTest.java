@@ -26,6 +26,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 
 import org.databene.commons.ArrayFormat;
+import org.databene.jdbacl.model.DefaultDBTable;
 import org.junit.Test;
 
 /**
@@ -161,6 +162,17 @@ public class SQLUtilTest {
 		assertEquals("select a from b", SQLUtil.normalize("select a /*x,y*/ from b", true));
 		assertEquals("select a from b -- ignore this", SQLUtil.normalize("select a from b--ignore this", false));
 		assertEquals("select a from b", SQLUtil.normalize("select a from b--ignore this", true));
+	}
+	
+	@Test
+	// ds-8
+	public void testRenderQuery()
+	{
+		DefaultDBTable table = new DefaultDBTable("t");
+		String[] columnNames = {"x","y"};
+	    Object[] values = {"a","b"};
+		String query = SQLUtil.renderQuery(table, columnNames, values);
+		assertEquals("SELECT * FROM t WHERE x = 'a' AND y = 'b'", query);
 	}
 	
 	@Test

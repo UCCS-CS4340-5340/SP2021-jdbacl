@@ -48,6 +48,42 @@ public class DBCheckConstraintTest {
 		check("col1=1 and (col2 IS not null and (col3 is not null or col3 is not null or col4 is not null)) or col5=0", "col1", "col2", "col3", "col4", "col5"); 
 	}
 	
+	@Test
+	// ds-15
+	public void test_isIdentical()
+	{
+		DefaultDBTable table = new DefaultDBTable("t");
+		
+		DBCheckConstraint constraint = new DBCheckConstraint("ck", false, table, "col1 is null");
+		DBCheckConstraint constraint_copy = constraint;
+		DBCheckConstraint constraint2 = new DBCheckConstraint("ck", true, table, "col1 is null");
+		DBCheckConstraint constraint3 = new DBCheckConstraint("cka", true, table, "col1 is null");
+		DBCheckConstraint constraint4 = new DBCheckConstraint("ck", true, table, "col2 is null");
+		
+		assertTrue(constraint.isIdentical(constraint_copy)); // Check copy
+		assertTrue(constraint.isIdentical(constraint2)); // Same but different instance
+		assertFalse(constraint.isIdentical(constraint3)); // Different instance but name is different
+		assertFalse(constraint.isIdentical(constraint4)); // Different instance but condition is different
+	}
+	
+	@Test
+	// ds-16
+	public void test_isEquivalent()
+	{
+		DefaultDBTable table = new DefaultDBTable("t");
+		
+		DBCheckConstraint constraint = new DBCheckConstraint("ck", false, "t", "col1 is null");
+		DBCheckConstraint constraint_copy = constraint;
+		DBCheckConstraint constraint2 = new DBCheckConstraint("ck", true, table, "col1 is null");
+		DBCheckConstraint constraint3 = new DBCheckConstraint("cka", true, table, "col1 is null");
+		DBCheckConstraint constraint4 = new DBCheckConstraint("ck", true, table, "col2 is null");
+		
+		assertTrue(constraint.isEquivalent(constraint_copy)); // Check copy
+		assertTrue(constraint.isEquivalent(constraint2)); // Different instance, different table instances but tables have same name
+		assertTrue(constraint.isEquivalent(constraint3)); // Different instance but name is different
+		assertFalse(constraint.isIdentical(constraint4)); // Different instance but condition is different
+	}
+	
 	private void check(String condition, String... expectedColumnNames) {
 		DBCheckConstraint constraint = new DBCheckConstraint("ck", false, "tbl", condition);
 		Set<String> expectedSet = CollectionUtil.toSet(expectedColumnNames);
