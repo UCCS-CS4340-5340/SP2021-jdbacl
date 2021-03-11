@@ -25,7 +25,9 @@ Overall it seems the code provides various utilities related to JDBC databases. 
 # Initial Analysis
 
 ## Pitest
-My 5 "errors" are blocking the mutation test from working correctly atm.
+Pitest is a tool that provides mutation testing on your test suite. It breaksdown how many of the mutations were caught and even provides a detailed list of all mutations made, which were caught, and which were not.
+
+![plot](./img/mutation.png)
 
 ## EclEmma
 EclEmma is a tool that provides details on the coverage of your test suite. It gives you a detailed brakedown of how many lines were and were not covered by your test suite. It allows you to go further and see which lines in each file have been executed (green), when not all branches were covered (yellow), and which lines were not executed (red). 
