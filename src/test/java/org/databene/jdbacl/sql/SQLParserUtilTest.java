@@ -25,12 +25,17 @@ import static org.junit.Assert.*;
 
 import org.databene.jdbacl.sql.SQLParserUtil;
 import org.databene.jdbacl.sql.parser.ANTLRNoCaseStringStream;
+import org.databene.jdbacl.sql.parser.SQLParser;
+import org.databene.regex.antlr.RegexLexer;
 import org.databene.script.Expression;
 import org.databene.script.expression.EqualsExpression;
 import org.databene.script.expression.LogicalComplementExpression;
 import org.junit.Test;
-
+import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.TokenSource;
+import org.antlr.runtime.TokenStream;
 
 /**
  * Tests the {@link SQLParserUtil}.<br/><br/>
@@ -39,7 +44,6 @@ import org.antlr.runtime.CharStream;
  * @author Volker Bergmann
  */
 public class SQLParserUtilTest {
-
 
 	@Test
 	public void testInt() throws Exception {

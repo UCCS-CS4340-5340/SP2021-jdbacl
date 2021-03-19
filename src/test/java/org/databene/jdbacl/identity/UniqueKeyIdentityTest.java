@@ -21,7 +21,7 @@
 
 package org.databene.jdbacl.identity;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 import java.sql.Connection;
 
@@ -62,5 +62,22 @@ public class UniqueKeyIdentityTest extends AbstractIdentityTest {
 		
 		dropTables(connection);
 	}
+	
+	@Test
+	// ds-34
+	public void test_registerSource() throws Exception
+	{
+		Connection connection = connectDB("db", HSQLUtil.DEFAULT_PORT + 1);
+		Database database = importDatabase(connection);
+		IdentityProvider identityProvider = createIdentities(database);
+		MemKeyMapper mapper = new MemKeyMapper(connection, "db", null, null, identityProvider, database);
+		
+		assertFalse(mapper.isInSourceDBMap("test", connection));
+		
+		mapper.registerSource("test", connection);
+		
+		assertTrue(mapper.isInSourceDBMap("test", connection));
+	}
+
 
 }

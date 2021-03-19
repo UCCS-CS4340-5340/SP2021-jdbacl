@@ -21,6 +21,7 @@
 
 package org.databene.jdbacl.dialect;
 
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.*;
 
 import java.math.BigInteger;
@@ -28,6 +29,7 @@ import java.sql.Connection;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.lang.Character;
 
 import org.databene.commons.NameUtil;
 import org.databene.commons.StringUtil;
@@ -68,6 +70,9 @@ public abstract class DatabaseDialectTest<E extends DatabaseDialect> {
 	protected final static Time TIME_131415 = TimeUtil.time(13, 14, 15, 0);
 	protected final static Timestamp TIMESTAMP_19710203131415123456789 = TimeUtil.timestamp(1971, 1, 3, 13, 14, 15, 123456789);
 	
+	
+	String TEST_ENV = "org/databene/jdbacl/test";
+	
 	public DatabaseDialectTest(E dialect) {
 	    this.dialect = dialect;
 	    this.logger = LoggerFactory.getLogger(getClass());
@@ -96,6 +101,43 @@ public abstract class DatabaseDialectTest<E extends DatabaseDialect> {
 	{
 		getUpdate();
 		assertEquals("update catalog.schemea.t set column1=? where column0=?", update);
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	// ds-35
+	public void test_emptyPKColumns_Update()
+	{
+		DefaultDBTable table = new DefaultDBTable("t");
+		DBSchema schema = new DBSchema("schemea", new DBCatalog("catalog"));
+		table.setSchema(schema);
+		
+		String[] pkColumnNames = {};
+		
+		ColumnInfo columnInfo0 = new ColumnInfo("column0", 0, ColumnInfo.class);
+		ColumnInfo columnInfo1 = new ColumnInfo("column1", 1, ColumnInfo.class);
+		List<ColumnInfo> columnInfoList = new Vector<ColumnInfo>();
+		columnInfoList.add(columnInfo0);
+		columnInfoList.add(columnInfo1);
+		
+		update = dialect.update(table, pkColumnNames, columnInfoList);
+	}
+	
+	@Test
+	// ds-36
+	public void test_formatValue_Character()
+	{
+		Character ch = new Character('a');
+		String str = dialect.formatValue(ch);
+		assertEquals("'a'", str);
+	}
+	
+	@Test
+	// ds-37
+	public void test_formatValue_Other()
+	{
+		Integer i = new Integer(5);
+		String str = dialect.formatValue(i);
+		assertEquals("5", str);
 	}
 	
 	public void getInsert()

@@ -269,7 +269,7 @@ public class SQLParser extends Parser {
 
     // $ANTLR start "command"
     // /Users/volker/Documents/databene/jdbacl/src/main/g/SQL.g:95:1: command : ( ( create_table ';' ) | ( comment ';' ) | ( drop_table ';' ) | ( alter_table ';' ) | ( create_index ';' ) | ( drop_index ';' ) | ( create_sequence ';' ) | ( drop_sequence ';' ) );
-    public final SQLParser.command_return command() throws RecognitionException {
+	public final SQLParser.command_return command() throws RecognitionException {
         SQLParser.command_return retval = new SQLParser.command_return();
         retval.start = input.LT(1);
 

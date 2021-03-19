@@ -24,11 +24,19 @@ package org.databene.jdbacl.model.xml;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.sql.Types;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import org.databene.commons.IOUtil;
 import org.databene.jdbacl.model.AbstractModelTest;
+import org.databene.jdbacl.model.DBColumn;
+import org.databene.jdbacl.model.DBTable;
+import org.databene.jdbacl.model.DBUniqueConstraint;
 import org.databene.jdbacl.model.Database;
+import org.databene.jdbacl.model.DBDataType;
+import org.databene.jdbacl.model.DBForeignKeyConstraint;
 import org.junit.Test;
 
 /**
@@ -48,5 +56,70 @@ public class XMLModelExporterTest extends AbstractModelTest {
 //		String[] actualLines = IOUtil.readTextLines(file.getCanonicalPath(), false);
 //		assertTrue(Arrays.equals(expectedLines, actualLines));
 //	}
+	
+	// Test the abstract model's database functionality 
+	// Should probably be moved to a new file :/
+	
+	@Test
+	// ds-28
+	public void test_getTables()
+	{
+		Database db = createTestModel();
+		List<DBTable> tableList = db.getTables();
+		assertEquals(4, tableList.size());
+	}
+	
+	@Test
+	// ds-29
+	public void test_getTable_getColumns()
+	{
+		Database db = createTestModel();
+		DBTable table1 = db.getTable("table1");
+		List<DBColumn> columnList = table1.getColumns();
+		assertEquals(2, columnList.size());
+	}
+	
+	@Test
+	// ds-30
+	public void test_getColumn()
+	{
+		Database db = createTestModel();
+		DBTable table1 = db.getTable("table1");
+		DBColumn column = table1.getColumn("id1");
+		assertEquals(DBDataType.getInstance("INT"), column.getType());
+	}
+	
+	@Test
+	// ds-31
+	public void test_getForeignKeys()
+	{
+		Database db = createTestModel();
+		DBTable table1 = db.getTable("table1");
+		Set<DBForeignKeyConstraint> set = table1.getForeignKeyConstraints();
+		assertEquals(0, set.size());
+	}
+	
+	@Test
+	// ds-32
+	public void test_getPrimaryKeyColumns()
+	{
+		Database db = createTestModel();
+		DBTable table1 = db.getTable("table1");
+		String[] list = table1.getPKColumnNames();
+
+		assertEquals(1, list.length);
+	}
+	
+	@Test
+	// ds-33
+	public void test_getUniqueConstraints()
+	{
+		Database db = createTestModel();
+		DBTable table1 = db.getTable("table1");
+		Set<DBUniqueConstraint> set = table1.getUniqueConstraints(true);
+		assertEquals(2, set.size());
+		set = table1.getUniqueConstraints(false);
+		assertEquals(1, set.size());
+	}
 
 }

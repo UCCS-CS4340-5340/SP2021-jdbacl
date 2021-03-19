@@ -34,6 +34,25 @@ import org.junit.Test;
  * @author Volker Bergmann
  */
 public class DBDataTypeTest {
+	
+	@Test
+	// ds-21
+	public void testPutInInstancesByTypeAndName()
+	{
+		assertFalse(DBDataType.inInstancesByTypeAndName(Types.INTEGER, "MADE_UP"));
+		
+		DBDataType.getInstance(Types.INTEGER, "MADE_UP");
+		
+		assertTrue(DBDataType.inInstancesByTypeAndName(Types.INTEGER, "MADE_UP"));
+	}
+	
+	@Test(expected = NullPointerException.class)
+	// ds-22
+	public void testWrongInInstancesByName()
+	{
+		DBDataType.getInstance("MADE_UP");
+	}
+	
 
 	@Test
 	public void testGetInstanceByDescriptor() {

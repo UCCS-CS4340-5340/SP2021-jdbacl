@@ -25,6 +25,7 @@
  */
 
 package org.databene.jdbacl.model;
+import org.mockito.*;
 
 import java.sql.Types;
 
@@ -57,7 +58,7 @@ public class DefaultDBColumnTest {
 		assertFalse(column.isIdentical(column4));
 		
 	}
-	
+
 	@Test
 	// db-20
 	public void test_equals()

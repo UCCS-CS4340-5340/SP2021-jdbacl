@@ -139,9 +139,22 @@ public class DBDataType implements Named, Serializable {
         }
 		return result;
     }
-
+	
     private String name;
     private int jdbcType;
+	
+	// testing -------------------------------------------------------------------------------------------------------
+	
+    public static boolean inInstancesByTypeAndName(int jdbcType, String name)
+	{
+		TypeDescriptor descriptor = new TypeDescriptor(jdbcType, name.toUpperCase());
+        DBDataType result = INSTANCES_BY_TYPE_AND_NAME.get(descriptor);
+        if (result == null)
+        {
+        	return false;
+        }
+        return true;
+	}
 
     // constructors ----------------------------------------------------------------------------------------------------
 

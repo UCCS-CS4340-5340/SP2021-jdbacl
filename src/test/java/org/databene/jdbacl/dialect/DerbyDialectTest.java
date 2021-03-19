@@ -36,6 +36,17 @@ public class DerbyDialectTest extends DatabaseDialectTest<DerbyDialect> {
 	public DerbyDialectTest() {
 	    super(new DerbyDialect());
     }
+	
+	@Test 
+	// ds-39
+	public void test_isDefaultSchema()
+	{
+		assertTrue(dialect.isDefaultSchema("APP", "anything"));
+		assertTrue(dialect.isDefaultSchema("app", "anything"));
+		assertTrue(dialect.isDefaultSchema("specific", "specific"));
+		assertTrue(dialect.isDefaultSchema("sPeCiFiC", "specific"));
+		assertFalse(dialect.isDefaultSchema("anything", "APP"));
+	}
 
 	@Test
 	public void testSequenceSupported() {

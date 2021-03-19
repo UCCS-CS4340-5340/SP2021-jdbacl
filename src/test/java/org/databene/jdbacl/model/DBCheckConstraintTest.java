@@ -84,11 +84,26 @@ public class DBCheckConstraintTest {
 		assertFalse(constraint.isIdentical(constraint4)); // Different instance but condition is different
 	}
 	
+	@Test
+	// ds-40
+	public void test_toString()
+	{
+		DefaultDBTable table = new DefaultDBTable("t");
+		DBCheckConstraint constraint = new DBCheckConstraint("ck", false, table, "col1 is null");
+		
+		assertEquals("CONSTRAINT ckCHECK col1 is null", constraint.toString());
+		
+		DBCheckConstraint constraint2 = new DBCheckConstraint(null, false, table, "col1 is null");
+		
+		assertEquals("CHECK col1 is null", constraint2.toString());
+	}
+	
 	private void check(String condition, String... expectedColumnNames) {
 		DBCheckConstraint constraint = new DBCheckConstraint("ck", false, "tbl", condition);
 		Set<String> expectedSet = CollectionUtil.toSet(expectedColumnNames);
 		Set<String> actualSet = CollectionUtil.toSet(constraint.getColumnNames());
 		assertEquals(expectedSet, actualSet);
 	}
+
 	
 }

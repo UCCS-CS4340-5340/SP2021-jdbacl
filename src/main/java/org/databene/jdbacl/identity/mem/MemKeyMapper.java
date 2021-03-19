@@ -102,6 +102,16 @@ public class MemKeyMapper extends KeyMapper {
 	    	sourceDBMappers.put(sourceDbId, mapper);
 	    }
     }
+    
+    public boolean isInSourceDBMap(String sourceDbId, Connection connection)
+    {
+    	SourceDatabaseMapper mapper = sourceDBMappers.get(sourceDbId);
+	    if (mapper == null) 
+	    {
+	    	return false;
+	    }
+	    return true;
+    }
 
     private void createSourceDBMapper(Connection connection, String sourceDbId) {
 	    String sourceId = sourceDbId;

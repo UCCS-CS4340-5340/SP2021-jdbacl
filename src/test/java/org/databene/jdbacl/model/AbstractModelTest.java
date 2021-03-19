@@ -22,6 +22,9 @@
 package org.databene.jdbacl.model;
 
 import java.sql.Types;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 import org.databene.commons.TimeUtil;
 import org.databene.commons.version.VersionNumber;
@@ -83,5 +86,6 @@ public abstract class AbstractModelTest {
 		
 		return db;
 	}
+	
 	
 }

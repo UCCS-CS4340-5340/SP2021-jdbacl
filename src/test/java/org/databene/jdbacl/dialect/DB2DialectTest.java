@@ -38,6 +38,14 @@ public class DB2DialectTest extends DatabaseDialectTest<DB2Dialect> {
 	public DB2DialectTest() {
 	    super(new DB2Dialect());
     }
+	
+	@Test
+	// ds-38
+	public void test_renderFetchSequenceValue()
+	{
+		String str = dialect.renderFetchSequenceValue("table.sequence");
+		assertEquals("select nextval for sequence from table", str);
+	}
 
 	@Test
 	public void testnextSequenceValue() {
