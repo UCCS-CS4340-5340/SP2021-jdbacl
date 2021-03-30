@@ -3,7 +3,7 @@
 2. Select build.xml in Project Explorer
  *Right-click and select Run As
  *Select "1 Ant Build"
-3. Add Mockito to the build path as an external JAR.
+3. Add an empty "test.env.properties" file to directory: C:\Users\USERNAME\databene
 
 ![plot](./img/successful_build.png)
 

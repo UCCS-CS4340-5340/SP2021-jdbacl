@@ -139,4 +139,22 @@ public class OracleDialectTest extends DatabaseDialectTest<OracleDialect> {
 		getUpdate();
 		assertEquals("update \"catalog\".\"schemea\".\"t\" set \"column1\"=? where \"column0\"=?", update);
 	}
+	
+	@Test
+	// ds-46
+	public void testDefaultCatalog()
+	{
+		assertTrue(dialect.isDefaultCatalog(null, "adfaf"));
+		assertFalse(dialect.isDefaultCatalog("", "adfaf"));
+		assertFalse(dialect.isDefaultCatalog("fgdfa", "adfaf"));
+	}
+	
+	@Test
+	// ds-47
+	public void testDefaultSchema()
+	{
+		assertTrue(dialect.isDefaultSchema("", ""));
+		assertTrue(dialect.isDefaultSchema("aBc", "AbC"));
+		assertFalse(dialect.isDefaultSchema("aBc", "D"));
+	}
 }
