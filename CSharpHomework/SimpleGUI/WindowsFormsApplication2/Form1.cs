@@ -15,7 +15,7 @@ namespace CS4340_5340_HW5
 		int[] y_position = new int[1000];
 		int[] x_velocity = new int[1000];
 		int[] y_velocity = new int[1000];
-		int[] w = new int[1000];
+		int[] boxWidth = new int[1000];
 		int[] h = new int[1000];
 		Color[] c = new Color[1000];
 		bool[] col = new bool[1000];
@@ -44,9 +44,9 @@ namespace CS4340_5340_HW5
 			{
 				for (int i = 0; i < 100 && itemCount < 1000; ++i)
 				{
-					w[itemCount] = 20;
+					boxWidth[itemCount] = 20;
 					h[itemCount] = 20;
-					x_position[itemCount] = (int)(r.NextDouble() * (pnl.Width - w[itemCount]));
+					x_position[itemCount] = (int)(r.NextDouble() * (pnl.Width - boxWidth[itemCount]));
 					y_position[itemCount] = (int)(r.NextDouble() * (pnl.Height - h[itemCount]));
 					x_velocity[itemCount] = r.Next(2) * 2 - 1;
 					y_velocity[itemCount] = r.Next(2) * 2 - 1;
@@ -66,12 +66,12 @@ namespace CS4340_5340_HW5
 					y_position[itemCount] = ((MouseEventArgs)e).Y;
 					x_velocity[itemCount] = r.Next(2) * 2 - 1;
 					y_velocity[itemCount] = r.Next(2) * 2 - 1;
-					w[itemCount] = 20;
+					boxWidth[itemCount] = 20;
 					h[itemCount] = 20;
 					col[itemCount] = false;
 					c[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					Graphics gr = pnl.CreateGraphics();
-					gr.FillRectangle(new SolidBrush(c[itemCount]), x_position[itemCount], y_position[itemCount], w[itemCount], h[itemCount]);
+					gr.FillRectangle(new SolidBrush(c[itemCount]), x_position[itemCount], y_position[itemCount], boxWidth[itemCount], h[itemCount]);
 					itemCount++;
 					pnl.Refresh();
 				}
@@ -80,7 +80,7 @@ namespace CS4340_5340_HW5
 					Graphics gr = pnl.CreateGraphics();
 					for (int i = 0; i < itemCount; ++i)
 					{
-						gr.FillRectangle(new SolidBrush(c[i]), x_position[i], y_position[i], w[i], h[i]);
+						gr.FillRectangle(new SolidBrush(c[i]), x_position[i], y_position[i], boxWidth[i], h[i]);
 					}
 				}
 			}
@@ -99,13 +99,13 @@ namespace CS4340_5340_HW5
 					{
 						int dX = Math.Abs(x_position[i] - x_position[j]);
 						int dY = Math.Abs(y_position[i] - y_position[j]);
-						if (dX < w[i] && dY < h[i])
+						if (dX < boxWidth[i] && dY < h[i])
 						{
 							col[i] = true;
 							col[j] = true;
 							c[j] = Color.Red;
 							c[i] = Color.Red;
-							dX = w[i] - dX;
+							dX = boxWidth[i] - dX;
 							dY = h[i] - dY;
 							if (dX < dY)
 							{
@@ -207,10 +207,10 @@ namespace CS4340_5340_HW5
 							}
 						}
 					}
-					if (x_position[i] > pnl.Width - w[i])
+					if (x_position[i] > pnl.Width - boxWidth[i])
 					{
 						x_velocity[i] *= -1;
-						x_position[i] = pnl.Width - w[i];
+						x_position[i] = pnl.Width - boxWidth[i];
 						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
 					else if (x_position[i] < 0)
