@@ -19,7 +19,7 @@ namespace CS4340_5340_HW5
 		int[] h = new int[1000];
 		Color[] c = new Color[1000];
 		bool[] col = new bool[1000];
-		int cn = 0;
+		int itemCount = 0;
 		Random r = new Random();
 		public Form1()
 		{
@@ -42,17 +42,17 @@ namespace CS4340_5340_HW5
 		{
 			if (s is Button)
 			{
-				for (int i = 0; i < 100 && cn < 1000; ++i)
+				for (int i = 0; i < 100 && itemCount < 1000; ++i)
 				{
-					w[cn] = 20;
-					h[cn] = 20;
-					xp[cn] = (int)(r.NextDouble() * (pnl.Width - w[cn]));
-					yp[cn] = (int)(r.NextDouble() * (pnl.Height - h[cn]));
-					xv[cn] = r.Next(2) * 2 - 1;
-					yv[cn] = r.Next(2) * 2 - 1;
-					col[cn] = false;
-					c[cn] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
-					cn++;
+					w[itemCount] = 20;
+					h[itemCount] = 20;
+					xp[itemCount] = (int)(r.NextDouble() * (pnl.Width - w[itemCount]));
+					yp[itemCount] = (int)(r.NextDouble() * (pnl.Height - h[itemCount]));
+					xv[itemCount] = r.Next(2) * 2 - 1;
+					yv[itemCount] = r.Next(2) * 2 - 1;
+					col[itemCount] = false;
+					c[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+					itemCount++;
 				}
 				pnl.Refresh();
 			}
@@ -60,25 +60,25 @@ namespace CS4340_5340_HW5
 			{
 				if (e is MouseEventArgs)
 				{
-					if (cn == 1000)
+					if (itemCount == 1000)
 						return;
-					xp[cn] = ((MouseEventArgs)e).X;
-					yp[cn] = ((MouseEventArgs)e).Y;
-					xv[cn] = r.Next(2) * 2 - 1;
-					yv[cn] = r.Next(2) * 2 - 1;
-					w[cn] = 20;
-					h[cn] = 20;
-					col[cn] = false;
-					c[cn] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+					xp[itemCount] = ((MouseEventArgs)e).X;
+					yp[itemCount] = ((MouseEventArgs)e).Y;
+					xv[itemCount] = r.Next(2) * 2 - 1;
+					yv[itemCount] = r.Next(2) * 2 - 1;
+					w[itemCount] = 20;
+					h[itemCount] = 20;
+					col[itemCount] = false;
+					c[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					Graphics gr = pnl.CreateGraphics();
-					gr.FillRectangle(new SolidBrush(c[cn]), xp[cn], yp[cn], w[cn], h[cn]);
-					cn++;
+					gr.FillRectangle(new SolidBrush(c[itemCount]), xp[itemCount], yp[itemCount], w[itemCount], h[itemCount]);
+					itemCount++;
 					pnl.Refresh();
 				}
 				else if (e is PaintEventArgs)
 				{
 					Graphics gr = pnl.CreateGraphics();
-					for (int i = 0; i < cn; ++i)
+					for (int i = 0; i < itemCount; ++i)
 					{
 						gr.FillRectangle(new SolidBrush(c[i]), xp[i], yp[i], w[i], h[i]);
 					}
@@ -86,7 +86,7 @@ namespace CS4340_5340_HW5
 			}
 			else if (s is Timer)
 			{
-				for (int i = 0; i < cn; ++i)
+				for (int i = 0; i < itemCount; ++i)
 				{
 					if (col[i])
 					{
@@ -95,7 +95,7 @@ namespace CS4340_5340_HW5
 					}
 					xp[i] += xv[i];
 					yp[i] += yv[i];
-					for (int j = i + 1; j < cn; ++j)
+					for (int j = i + 1; j < itemCount; ++j)
 					{
 						int dX = Math.Abs(xp[i] - xp[j]);
 						int dY = Math.Abs(yp[i] - yp[j]);
@@ -232,7 +232,7 @@ namespace CS4340_5340_HW5
 						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
 				}
-				label1.Text = cn.ToString() + " Items";
+				label1.Text = itemCount.ToString() + " Items";
 				label1.Refresh();
 				pnl.Refresh();
 			}
@@ -240,7 +240,7 @@ namespace CS4340_5340_HW5
 
 		private void button4_Click(object sender, EventArgs e)
 		{
-			cn = 0;
+			itemCount = 0;
 		}
 	}
 }
