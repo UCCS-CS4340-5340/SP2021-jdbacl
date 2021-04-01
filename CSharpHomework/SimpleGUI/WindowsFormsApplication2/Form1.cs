@@ -13,7 +13,7 @@ namespace CS4340_5340_HW5
 	{
 		int[] x_position = new int[1000];
 		int[] y_position = new int[1000];
-		int[] xv = new int[1000];
+		int[] x_velocity = new int[1000];
 		int[] yv = new int[1000];
 		int[] w = new int[1000];
 		int[] h = new int[1000];
@@ -48,7 +48,7 @@ namespace CS4340_5340_HW5
 					h[itemCount] = 20;
 					x_position[itemCount] = (int)(r.NextDouble() * (pnl.Width - w[itemCount]));
 					y_position[itemCount] = (int)(r.NextDouble() * (pnl.Height - h[itemCount]));
-					xv[itemCount] = r.Next(2) * 2 - 1;
+					x_velocity[itemCount] = r.Next(2) * 2 - 1;
 					yv[itemCount] = r.Next(2) * 2 - 1;
 					col[itemCount] = false;
 					c[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
@@ -64,7 +64,7 @@ namespace CS4340_5340_HW5
 						return;
 					x_position[itemCount] = ((MouseEventArgs)e).X;
 					y_position[itemCount] = ((MouseEventArgs)e).Y;
-					xv[itemCount] = r.Next(2) * 2 - 1;
+					x_velocity[itemCount] = r.Next(2) * 2 - 1;
 					yv[itemCount] = r.Next(2) * 2 - 1;
 					w[itemCount] = 20;
 					h[itemCount] = 20;
@@ -93,7 +93,7 @@ namespace CS4340_5340_HW5
 						col[i] = false;
 						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
-					x_position[i] += xv[i];
+					x_position[i] += x_velocity[i];
 					y_position[i] += yv[i];
 					for (int j = i + 1; j < itemCount; ++j)
 					{
@@ -111,49 +111,49 @@ namespace CS4340_5340_HW5
 							{
 								if (x_position[i] < x_position[j])
 								{
-									switch (xv[i])
+									switch (x_velocity[i])
 									{
 										case -1:
-											xv[i] = 1;
+											x_velocity[i] = 1;
 											break;
 										case 1:
-											xv[i] = -1;
+											x_velocity[i] = -1;
 											break;
 									}
-									switch (xv[j])
+									switch (x_velocity[j])
 									{
 										case -1:
-											xv[j] = 1;
+											x_velocity[j] = 1;
 											break;
 										case 1:
-											xv[j] = -1;
+											x_velocity[j] = -1;
 											break;
 									}
-									x_position[i] += xv[i]; // * dX;
-									x_position[j] += xv[j]; // * dX;
+									x_position[i] += x_velocity[i]; // * dX;
+									x_position[j] += x_velocity[j]; // * dX;
 								}
 								else
 								{
-									switch (xv[i])
+									switch (x_velocity[i])
 									{
 										case -1:
-											xv[i] = 1;
+											x_velocity[i] = 1;
 											break;
 										case 1:
-											xv[i] = -1;
+											x_velocity[i] = -1;
 											break;
 									}
-									switch (xv[j])
+									switch (x_velocity[j])
 									{
 										case -1:
-											xv[j] = 1;
+											x_velocity[j] = 1;
 											break;
 										case 1:
-											xv[j] = -1;
+											x_velocity[j] = -1;
 											break;
 									}
-									x_position[j] += xv[j]; // * dX;
-									x_position[i] += xv[i]; // * dX;
+									x_position[j] += x_velocity[j]; // * dX;
+									x_position[i] += x_velocity[i]; // * dX;
 								}
 							}
 							else
@@ -209,13 +209,13 @@ namespace CS4340_5340_HW5
 					}
 					if (x_position[i] > pnl.Width - w[i])
 					{
-						xv[i] *= -1;
+						x_velocity[i] *= -1;
 						x_position[i] = pnl.Width - w[i];
 						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
 					else if (x_position[i] < 0)
 					{
-						xv[i] *= -1;
+						x_velocity[i] *= -1;
 						x_position[i] = 0;
 						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
