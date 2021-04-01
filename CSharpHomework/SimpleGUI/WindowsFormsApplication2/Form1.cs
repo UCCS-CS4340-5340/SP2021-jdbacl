@@ -11,7 +11,7 @@ namespace CS4340_5340_HW5
 {
 	public partial class Form1 : Form
 	{
-		int[] xp = new int[1000];
+		int[] x_position = new int[1000];
 		int[] yp = new int[1000];
 		int[] xv = new int[1000];
 		int[] yv = new int[1000];
@@ -46,7 +46,7 @@ namespace CS4340_5340_HW5
 				{
 					w[itemCount] = 20;
 					h[itemCount] = 20;
-					xp[itemCount] = (int)(r.NextDouble() * (pnl.Width - w[itemCount]));
+					x_position[itemCount] = (int)(r.NextDouble() * (pnl.Width - w[itemCount]));
 					yp[itemCount] = (int)(r.NextDouble() * (pnl.Height - h[itemCount]));
 					xv[itemCount] = r.Next(2) * 2 - 1;
 					yv[itemCount] = r.Next(2) * 2 - 1;
@@ -62,7 +62,7 @@ namespace CS4340_5340_HW5
 				{
 					if (itemCount == 1000)
 						return;
-					xp[itemCount] = ((MouseEventArgs)e).X;
+					x_position[itemCount] = ((MouseEventArgs)e).X;
 					yp[itemCount] = ((MouseEventArgs)e).Y;
 					xv[itemCount] = r.Next(2) * 2 - 1;
 					yv[itemCount] = r.Next(2) * 2 - 1;
@@ -71,7 +71,7 @@ namespace CS4340_5340_HW5
 					col[itemCount] = false;
 					c[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					Graphics gr = pnl.CreateGraphics();
-					gr.FillRectangle(new SolidBrush(c[itemCount]), xp[itemCount], yp[itemCount], w[itemCount], h[itemCount]);
+					gr.FillRectangle(new SolidBrush(c[itemCount]), x_position[itemCount], yp[itemCount], w[itemCount], h[itemCount]);
 					itemCount++;
 					pnl.Refresh();
 				}
@@ -80,7 +80,7 @@ namespace CS4340_5340_HW5
 					Graphics gr = pnl.CreateGraphics();
 					for (int i = 0; i < itemCount; ++i)
 					{
-						gr.FillRectangle(new SolidBrush(c[i]), xp[i], yp[i], w[i], h[i]);
+						gr.FillRectangle(new SolidBrush(c[i]), x_position[i], yp[i], w[i], h[i]);
 					}
 				}
 			}
@@ -93,11 +93,11 @@ namespace CS4340_5340_HW5
 						col[i] = false;
 						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
-					xp[i] += xv[i];
+					x_position[i] += xv[i];
 					yp[i] += yv[i];
 					for (int j = i + 1; j < itemCount; ++j)
 					{
-						int dX = Math.Abs(xp[i] - xp[j]);
+						int dX = Math.Abs(x_position[i] - x_position[j]);
 						int dY = Math.Abs(yp[i] - yp[j]);
 						if (dX < w[i] && dY < h[i])
 						{
@@ -109,7 +109,7 @@ namespace CS4340_5340_HW5
 							dY = h[i] - dY;
 							if (dX < dY)
 							{
-								if (xp[i] < xp[j])
+								if (x_position[i] < x_position[j])
 								{
 									switch (xv[i])
 									{
@@ -129,8 +129,8 @@ namespace CS4340_5340_HW5
 											xv[j] = -1;
 											break;
 									}
-									xp[i] += xv[i]; // * dX;
-									xp[j] += xv[j]; // * dX;
+									x_position[i] += xv[i]; // * dX;
+									x_position[j] += xv[j]; // * dX;
 								}
 								else
 								{
@@ -152,8 +152,8 @@ namespace CS4340_5340_HW5
 											xv[j] = -1;
 											break;
 									}
-									xp[j] += xv[j]; // * dX;
-									xp[i] += xv[i]; // * dX;
+									x_position[j] += xv[j]; // * dX;
+									x_position[i] += xv[i]; // * dX;
 								}
 							}
 							else
@@ -207,16 +207,16 @@ namespace CS4340_5340_HW5
 							}
 						}
 					}
-					if (xp[i] > pnl.Width - w[i])
+					if (x_position[i] > pnl.Width - w[i])
 					{
 						xv[i] *= -1;
-						xp[i] = pnl.Width - w[i];
+						x_position[i] = pnl.Width - w[i];
 						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
-					else if (xp[i] < 0)
+					else if (x_position[i] < 0)
 					{
 						xv[i] *= -1;
-						xp[i] = 0;
+						x_position[i] = 0;
 						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
 					if (yp[i] > pnl.Height - h[i])
