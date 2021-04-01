@@ -238,7 +238,7 @@ namespace CS4340_5340_HW5
 			}
 		}
 
-		private void button4_Click(object sender, EventArgs e)
+		private void clearButtonClicked(object sender, EventArgs e)
 		{
 			itemCount = 0;
 		}
