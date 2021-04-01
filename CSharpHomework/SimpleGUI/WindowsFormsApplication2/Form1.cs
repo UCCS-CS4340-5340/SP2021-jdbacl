@@ -17,7 +17,7 @@ namespace CS4340_5340_HW5
 		int[] y_velocity = new int[1000];
 		int[] boxWidth = new int[1000];
 		int[] boxHeight = new int[1000];
-		Color[] c = new Color[1000];
+		Color[] boxColor = new Color[1000];
 		bool[] col = new bool[1000];
 		int itemCount = 0;
 		Random r = new Random();
@@ -51,7 +51,7 @@ namespace CS4340_5340_HW5
 					x_velocity[itemCount] = r.Next(2) * 2 - 1;
 					y_velocity[itemCount] = r.Next(2) * 2 - 1;
 					col[itemCount] = false;
-					c[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+					boxColor[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					itemCount++;
 				}
 				pnl.Refresh();
@@ -69,9 +69,9 @@ namespace CS4340_5340_HW5
 					boxWidth[itemCount] = 20;
 					boxHeight[itemCount] = 20;
 					col[itemCount] = false;
-					c[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+					boxColor[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					Graphics gr = pnl.CreateGraphics();
-					gr.FillRectangle(new SolidBrush(c[itemCount]), x_position[itemCount], y_position[itemCount], boxWidth[itemCount], boxHeight[itemCount]);
+					gr.FillRectangle(new SolidBrush(boxColor[itemCount]), x_position[itemCount], y_position[itemCount], boxWidth[itemCount], boxHeight[itemCount]);
 					itemCount++;
 					pnl.Refresh();
 				}
@@ -80,7 +80,7 @@ namespace CS4340_5340_HW5
 					Graphics gr = pnl.CreateGraphics();
 					for (int i = 0; i < itemCount; ++i)
 					{
-						gr.FillRectangle(new SolidBrush(c[i]), x_position[i], y_position[i], boxWidth[i], boxHeight[i]);
+						gr.FillRectangle(new SolidBrush(boxColor[i]), x_position[i], y_position[i], boxWidth[i], boxHeight[i]);
 					}
 				}
 			}
@@ -91,7 +91,7 @@ namespace CS4340_5340_HW5
 					if (col[i])
 					{
 						col[i] = false;
-						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+						boxColor[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
 					x_position[i] += x_velocity[i];
 					y_position[i] += y_velocity[i];
@@ -103,8 +103,8 @@ namespace CS4340_5340_HW5
 						{
 							col[i] = true;
 							col[j] = true;
-							c[j] = Color.Red;
-							c[i] = Color.Red;
+							boxColor[j] = Color.Red;
+							boxColor[i] = Color.Red;
 							dX = boxWidth[i] - dX;
 							dY = boxHeight[i] - dY;
 							if (dX < dY)
@@ -211,25 +211,25 @@ namespace CS4340_5340_HW5
 					{
 						x_velocity[i] *= -1;
 						x_position[i] = pnl.Width - boxWidth[i];
-						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+						boxColor[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
 					else if (x_position[i] < 0)
 					{
 						x_velocity[i] *= -1;
 						x_position[i] = 0;
-						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+						boxColor[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
 					if (y_position[i] > pnl.Height - boxHeight[i])
 					{
 						y_velocity[i] *= -1;
 						y_position[i] = pnl.Height - boxHeight[i];
-						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+						boxColor[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
 					else if (y_position[i] < 0)
 					{
 						y_velocity[i] *= -1;
 						y_position[i] = 0;
-						c[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+						boxColor[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
 				}
 				label1.Text = itemCount.ToString() + " Items";
