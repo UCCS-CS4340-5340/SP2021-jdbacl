@@ -38,25 +38,27 @@ namespace CS4340_5340_HW5
 				return cp;
 			}
 		}
+
+		private void addItemsClicked(object s, EventArgs e)
+		{
+			for (int i = 0; i < 100 && itemCount < 1000; ++i)
+			{
+				boxWidth[itemCount] = 20;
+				boxHeight[itemCount] = 20;
+				x_position[itemCount] = (int)(r.NextDouble() * (pnl.Width - boxWidth[itemCount]));
+				y_position[itemCount] = (int)(r.NextDouble() * (pnl.Height - boxHeight[itemCount]));
+				x_velocity[itemCount] = r.Next(2) * 2 - 1;
+				y_velocity[itemCount] = r.Next(2) * 2 - 1;
+				col[itemCount] = false;
+				boxColor[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+				itemCount++;
+			}
+			pnl.Refresh();
+		}
+
 		private void EventStuff(object s, EventArgs e)
 		{
-			if (s is Button)
-			{
-				for (int i = 0; i < 100 && itemCount < 1000; ++i)
-				{
-					boxWidth[itemCount] = 20;
-					boxHeight[itemCount] = 20;
-					x_position[itemCount] = (int)(r.NextDouble() * (pnl.Width - boxWidth[itemCount]));
-					y_position[itemCount] = (int)(r.NextDouble() * (pnl.Height - boxHeight[itemCount]));
-					x_velocity[itemCount] = r.Next(2) * 2 - 1;
-					y_velocity[itemCount] = r.Next(2) * 2 - 1;
-					col[itemCount] = false;
-					boxColor[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
-					itemCount++;
-				}
-				pnl.Refresh();
-			}
-			else if (s is Panel)
+			if (s is Panel)
 			{
 				if (e is MouseEventArgs)
 				{

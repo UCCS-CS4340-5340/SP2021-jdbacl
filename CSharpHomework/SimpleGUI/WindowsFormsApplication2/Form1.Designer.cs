@@ -32,7 +32,7 @@ namespace CS4340_5340_HW5
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			this.button1 = new System.Windows.Forms.Button();
+			this.addItemsButton = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.pnl = new System.Windows.Forms.Panel();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -42,15 +42,15 @@ namespace CS4340_5340_HW5
 			this.button4 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
-			// button1
+			// addItemsButton
 			// 
-			this.button1.Location = new System.Drawing.Point(9, 10);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75, 23);
-			this.button1.TabIndex = 0;
-			this.button1.Text = "Add 100";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.EventStuff);
+			this.addItemsButton.Location = new System.Drawing.Point(9, 10);
+			this.addItemsButton.Name = "button1";
+			this.addItemsButton.Size = new System.Drawing.Size(75, 23);
+			this.addItemsButton.TabIndex = 0;
+			this.addItemsButton.Text = "Add 100";
+			this.addItemsButton.UseVisualStyleBackColor = true;
+			this.addItemsButton.Click += new System.EventHandler(this.addItemsClicked);
 			// 
 			// label1
 			// 
@@ -126,7 +126,7 @@ namespace CS4340_5340_HW5
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.pnl);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.addItemsButton);
 			this.Name = "Form1";
 			this.Text = "Collision Detection Test";
 			this.ResumeLayout(false);
@@ -136,7 +136,7 @@ namespace CS4340_5340_HW5
 
         #endregion
 
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button addItemsButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel pnl;
         private System.Windows.Forms.Timer timer1;
