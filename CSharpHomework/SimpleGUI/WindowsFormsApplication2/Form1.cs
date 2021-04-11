@@ -11,18 +11,17 @@ namespace CS4340_5340_HW5
 {
 	public partial class Form1 : Form
 	{
-		int[] x_position = new int[1000];
-		int[] y_position = new int[1000];
-		int[] x_velocity = new int[1000];
-		int[] y_velocity = new int[1000];
-		int[] boxWidth = new int[1000];
-		int[] boxHeight = new int[1000];
-		Color[] boxColor = new Color[1000];
-		bool[] col = new bool[1000];
+		Box[] boxes = new Box[1000];
 		int itemCount = 0;
 		Random r = new Random();
+
 		public Form1()
 		{
+			for(int i = 0; i < 1000; ++i)
+            {
+				boxes[i] = new Box();
+            }
+
 			InitializeComponent();
 			this.SetBounds((Screen.GetBounds(this).Width / 2) - (this.Width / 2),
 						   (Screen.GetBounds(this).Height / 2) - (this.Height / 2),
@@ -43,14 +42,16 @@ namespace CS4340_5340_HW5
 		{
 			for (int i = 0; i < 100 && itemCount < 1000; ++i)
 			{
-				boxWidth[itemCount] = 20;
-				boxHeight[itemCount] = 20;
-				x_position[itemCount] = (int)(r.NextDouble() * (pnl.Width - boxWidth[itemCount]));
-				y_position[itemCount] = (int)(r.NextDouble() * (pnl.Height - boxHeight[itemCount]));
-				x_velocity[itemCount] = r.Next(2) * 2 - 1;
-				y_velocity[itemCount] = r.Next(2) * 2 - 1;
-				col[itemCount] = false;
-				boxColor[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+				boxes[itemCount].BoxWidth = 20;
+				boxes[itemCount].BoxHeight = 20;
+				boxes[itemCount].X_position 
+					= (int)(r.NextDouble() * (pnl.Width - boxes[itemCount].BoxWidth));
+				boxes[itemCount].Y_position 
+					= (int)(r.NextDouble() * (pnl.Height - boxes[itemCount].BoxHeight));
+				boxes[itemCount].X_velocity = r.Next(2) * 2 - 1;
+				boxes[itemCount].Y_velocity = r.Next(2) * 2 - 1;
+				boxes[itemCount].Colliding = false;
+				boxes[itemCount].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 				itemCount++;
 			}
 			pnl.Refresh();
@@ -64,16 +65,20 @@ namespace CS4340_5340_HW5
 				{
 					if (itemCount == 1000)
 						return;
-					x_position[itemCount] = ((MouseEventArgs)e).X;
-					y_position[itemCount] = ((MouseEventArgs)e).Y;
-					x_velocity[itemCount] = r.Next(2) * 2 - 1;
-					y_velocity[itemCount] = r.Next(2) * 2 - 1;
-					boxWidth[itemCount] = 20;
-					boxHeight[itemCount] = 20;
-					col[itemCount] = false;
-					boxColor[itemCount] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+					boxes[itemCount].X_position = ((MouseEventArgs)e).X;
+					boxes[itemCount].Y_position = ((MouseEventArgs)e).Y;
+					boxes[itemCount].X_velocity= r.Next(2) * 2 - 1;
+					boxes[itemCount].Y_velocity = r.Next(2) * 2 - 1;
+					boxes[itemCount].BoxWidth = 20;
+					boxes[itemCount].BoxHeight = 20;
+					boxes[itemCount].Colliding = false;
+					boxes[itemCount].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					Graphics gr = pnl.CreateGraphics();
-					gr.FillRectangle(new SolidBrush(boxColor[itemCount]), x_position[itemCount], y_position[itemCount], boxWidth[itemCount], boxHeight[itemCount]);
+					gr.FillRectangle(new SolidBrush(boxes[itemCount].BoxColor), 
+													boxes[itemCount].X_position, 
+													boxes[itemCount].Y_position, 
+													boxes[itemCount].BoxWidth, 
+													boxes[itemCount].BoxHeight);
 					itemCount++;
 					pnl.Refresh();
 				}
@@ -82,7 +87,11 @@ namespace CS4340_5340_HW5
 					Graphics gr = pnl.CreateGraphics();
 					for (int i = 0; i < itemCount; ++i)
 					{
-						gr.FillRectangle(new SolidBrush(boxColor[i]), x_position[i], y_position[i], boxWidth[i], boxHeight[i]);
+						gr.FillRectangle(new SolidBrush(boxes[i].BoxColor),
+														boxes[i].X_position,
+														boxes[i].Y_position,
+														boxes[i].BoxWidth,
+														boxes[i].BoxHeight);
 					}
 				}
 			}
@@ -90,148 +99,148 @@ namespace CS4340_5340_HW5
 			{
 				for (int i = 0; i < itemCount; ++i)
 				{
-					if (col[i])
+					if (boxes[i].Colliding)
 					{
-						col[i] = false;
-						boxColor[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+						boxes[i].Colliding = false;
+						boxes[i].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
-					x_position[i] += x_velocity[i];
-					y_position[i] += y_velocity[i];
+					boxes[i].X_position += boxes[i].X_velocity;
+					boxes[i].Y_position += boxes[i].Y_velocity;
 					for (int j = i + 1; j < itemCount; ++j)
 					{
-						int dX = Math.Abs(x_position[i] - x_position[j]);
-						int dY = Math.Abs(y_position[i] - y_position[j]);
-						if (dX < boxWidth[i] && dY < boxHeight[i])
+						int dX = Math.Abs(boxes[i].X_position - boxes[j].X_position);
+						int dY = Math.Abs(boxes[i].Y_position - boxes[j].Y_position);
+						if (dX < boxes[i].BoxWidth && dY < boxes[i].BoxHeight)
 						{
-							col[i] = true;
-							col[j] = true;
-							boxColor[j] = Color.Red;
-							boxColor[i] = Color.Red;
-							dX = boxWidth[i] - dX;
-							dY = boxHeight[i] - dY;
+							boxes[i].Colliding = true;
+							boxes[j].Colliding = true;
+							boxes[j].BoxColor = Color.Red;
+							boxes[i].BoxColor = Color.Red;
+							dX = boxes[i].BoxWidth - dX;
+							dY = boxes[i].BoxHeight - dY;
 							if (dX < dY)
 							{
-								if (x_position[i] < x_position[j])
+								if (boxes[i].X_position < boxes[j].X_position)
 								{
-									switch (x_velocity[i])
+									switch (boxes[i].X_velocity)
 									{
 										case -1:
-											x_velocity[i] = 1;
+											boxes[i].X_velocity = 1;
 											break;
 										case 1:
-											x_velocity[i] = -1;
+											boxes[i].X_velocity = -1;
 											break;
 									}
-									switch (x_velocity[j])
+									switch (boxes[j].X_velocity)
 									{
 										case -1:
-											x_velocity[j] = 1;
+											boxes[j].X_velocity = 1;
 											break;
 										case 1:
-											x_velocity[j] = -1;
+											boxes[j].X_velocity = -1;
 											break;
 									}
-									x_position[i] += x_velocity[i]; // * dX;
-									x_position[j] += x_velocity[j]; // * dX;
+									boxes[i].X_position += boxes[i].X_velocity; // * dX;
+									boxes[j].X_position += boxes[j].X_velocity; // * dX;
 								}
 								else
 								{
-									switch (x_velocity[i])
+									switch (boxes[i].X_velocity)
 									{
 										case -1:
-											x_velocity[i] = 1;
+											boxes[i].X_velocity = 1;
 											break;
 										case 1:
-											x_velocity[i] = -1;
+											boxes[i].X_velocity = -1;
 											break;
 									}
-									switch (x_velocity[j])
+									switch (boxes[j].X_velocity)
 									{
 										case -1:
-											x_velocity[j] = 1;
+											boxes[j].X_velocity = 1;
 											break;
 										case 1:
-											x_velocity[j] = -1;
+											boxes[j].X_velocity = -1;
 											break;
 									}
-									x_position[j] += x_velocity[j]; // * dX;
-									x_position[i] += x_velocity[i]; // * dX;
+									boxes[j].X_position += boxes[j].X_velocity; // * dX;
+									boxes[i].X_position += boxes[i].X_velocity; // * dX;
 								}
 							}
 							else
 							{
-								if (y_position[i] < y_position[j])
+								if (boxes[i].Y_position < boxes[j].Y_position)
 								{
-									switch (y_velocity[i])
+									switch (boxes[i].Y_velocity)
 									{
 										case -1:
-											y_velocity[i] = 1;
+											boxes[i].Y_velocity = 1;
 											break;
 										case 1:
-											y_velocity[i] = -1;
+											boxes[i].Y_velocity = -1;
 											break;
 									}
-									switch (y_velocity[j])
+									switch (boxes[j].Y_velocity)
 									{
 										case -1:
-											y_velocity[j] = 1;
+											boxes[j].Y_velocity = 1;
 											break;
 										case 1:
-											y_velocity[j] = -1;
+											boxes[j].Y_velocity = -1;
 											break;
 									}
-									y_position[i] += y_velocity[i]; // * dY;
-									y_position[j] += y_velocity[j]; //* dY;
+									boxes[i].Y_position += boxes[i].Y_velocity; // * dY;
+									boxes[j].Y_position += boxes[j].Y_velocity; //* dY;
 								}
 								else
 								{
-									switch (y_velocity[i])
+									switch (boxes[i].Y_velocity)
 									{
 										case -1:
-											y_velocity[i] = 1;
+											boxes[i].Y_velocity = 1;
 											break;
 										case 1:
-											y_velocity[i] = -1;
+											boxes[i].Y_velocity = -1;
 											break;
 									}
-									switch (y_velocity[j])
+									switch (boxes[j].Y_velocity)
 									{
 										case -1:
-											y_velocity[j] = 1;
+											boxes[j].Y_velocity = 1;
 											break;
 										case 1:
-											y_velocity[j] = -1;
+											boxes[j].Y_velocity = -1;
 											break;
 									}
-									y_position[j] += y_velocity[j]; // * dY;
-									y_position[i] += y_velocity[i]; // * dY;
+									boxes[j].Y_position += boxes[j].Y_velocity; // * dY;
+									boxes[i].Y_position += boxes[i].Y_velocity; // * dY;
 								}
 							}
 						}
 					}
-					if (x_position[i] > pnl.Width - boxWidth[i])
+					if (boxes[i].X_position > pnl.Width - boxes[i].BoxWidth)
 					{
-						x_velocity[i] *= -1;
-						x_position[i] = pnl.Width - boxWidth[i];
-						boxColor[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+						boxes[i].X_velocity *= -1;
+						boxes[i].X_position = pnl.Width - boxes[i].BoxWidth;
+						boxes[i].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
-					else if (x_position[i] < 0)
+					else if (boxes[i].X_position < 0)
 					{
-						x_velocity[i] *= -1;
-						x_position[i] = 0;
-						boxColor[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+						boxes[i].X_velocity *= -1;
+						boxes[i].X_position = 0;
+						boxes[i].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
-					if (y_position[i] > pnl.Height - boxHeight[i])
+					if (boxes[i].Y_position > pnl.Height - boxes[i].BoxHeight)
 					{
-						y_velocity[i] *= -1;
-						y_position[i] = pnl.Height - boxHeight[i];
-						boxColor[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+						boxes[i].Y_velocity *= -1;
+						boxes[i].Y_position = pnl.Height - boxes[i].BoxHeight;
+						boxes[i].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
-					else if (y_position[i] < 0)
+					else if (boxes[i].Y_position < 0)
 					{
-						y_velocity[i] *= -1;
-						y_position[i] = 0;
-						boxColor[i] = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+						boxes[i].Y_velocity *= -1;
+						boxes[i].Y_position = 0;
+						boxes[i].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
 					}
 				}
 				label1.Text = itemCount.ToString() + " Items";
