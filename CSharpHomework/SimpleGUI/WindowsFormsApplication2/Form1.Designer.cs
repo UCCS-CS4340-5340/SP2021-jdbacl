@@ -70,13 +70,13 @@ namespace CS4340_5340_HW5
 			this.pnl.Size = new System.Drawing.Size(666, 417);
 			this.pnl.TabIndex = 5;
 			this.pnl.Click += new System.EventHandler(this.panelClicked);
-			this.pnl.Paint += new System.Windows.Forms.PaintEventHandler(this.EventStuff);
+			this.pnl.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPaint);
 			// 
 			// timer1
 			// 
 			this.timer1.Enabled = true;
 			this.timer1.Interval = 33;
-			this.timer1.Tick += new System.EventHandler(this.EventStuff);
+			this.timer1.Tick += new System.EventHandler(this.pollEvent);
 			// 
 			// button2
 			// 
