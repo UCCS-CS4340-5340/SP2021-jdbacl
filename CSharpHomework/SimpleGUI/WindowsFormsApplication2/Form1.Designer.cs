@@ -69,7 +69,7 @@ namespace CS4340_5340_HW5
 			this.pnl.Name = "pnl";
 			this.pnl.Size = new System.Drawing.Size(666, 417);
 			this.pnl.TabIndex = 5;
-			this.pnl.Click += new System.EventHandler(this.EventStuff);
+			this.pnl.Click += new System.EventHandler(this.panelClicked);
 			this.pnl.Paint += new System.Windows.Forms.PaintEventHandler(this.EventStuff);
 			// 
 			// timer1

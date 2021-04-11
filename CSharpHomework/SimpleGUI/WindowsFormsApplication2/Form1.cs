@@ -57,32 +57,33 @@ namespace CS4340_5340_HW5
 			pnl.Refresh();
 		}
 
+		private void panelClicked(object s, EventArgs e)
+		{
+			if (itemCount == 1000)
+				return;
+			boxes[itemCount].X_position = ((MouseEventArgs)e).X;
+			boxes[itemCount].Y_position = ((MouseEventArgs)e).Y;
+			boxes[itemCount].X_velocity = r.Next(2) * 2 - 1;
+			boxes[itemCount].Y_velocity = r.Next(2) * 2 - 1;
+			boxes[itemCount].BoxWidth = 20;
+			boxes[itemCount].BoxHeight = 20;
+			boxes[itemCount].Colliding = false;
+			boxes[itemCount].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+			Graphics gr = pnl.CreateGraphics();
+			gr.FillRectangle(new SolidBrush(boxes[itemCount].BoxColor),
+											boxes[itemCount].X_position,
+											boxes[itemCount].Y_position,
+											boxes[itemCount].BoxWidth,
+											boxes[itemCount].BoxHeight);
+			itemCount++;
+			pnl.Refresh();
+		}
+
 		private void EventStuff(object s, EventArgs e)
 		{
 			if (s is Panel)
 			{
-				if (e is MouseEventArgs)
-				{
-					if (itemCount == 1000)
-						return;
-					boxes[itemCount].X_position = ((MouseEventArgs)e).X;
-					boxes[itemCount].Y_position = ((MouseEventArgs)e).Y;
-					boxes[itemCount].X_velocity= r.Next(2) * 2 - 1;
-					boxes[itemCount].Y_velocity = r.Next(2) * 2 - 1;
-					boxes[itemCount].BoxWidth = 20;
-					boxes[itemCount].BoxHeight = 20;
-					boxes[itemCount].Colliding = false;
-					boxes[itemCount].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
-					Graphics gr = pnl.CreateGraphics();
-					gr.FillRectangle(new SolidBrush(boxes[itemCount].BoxColor), 
-													boxes[itemCount].X_position, 
-													boxes[itemCount].Y_position, 
-													boxes[itemCount].BoxWidth, 
-													boxes[itemCount].BoxHeight);
-					itemCount++;
-					pnl.Refresh();
-				}
-				else if (e is PaintEventArgs)
+				if (e is PaintEventArgs)
 				{
 					Graphics gr = pnl.CreateGraphics();
 					for (int i = 0; i < itemCount; ++i)
