@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace CS4340_5340_HW5
 {
@@ -24,7 +25,44 @@ namespace CS4340_5340_HW5
 			boxHeight = 0;
 			boxColor = new Color();
 			colliding = false;
-	}
+		}
+
+		public void checkColliding(int x, int y, int width, int height, Random r)
+        {
+			if (X_position > width - BoxWidth)
+			{
+				X_velocity *= -1;
+				X_position = width - BoxWidth;
+				BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+			}
+			else if (X_position < x)
+			{
+				X_velocity *= -1;
+				X_position = x;
+				BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+			}
+			if (Y_position > height - BoxHeight)
+			{
+				Y_velocity *= -1;
+				Y_position = height - BoxHeight;
+				BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+			}
+			else if (Y_position < y)
+			{
+				Y_velocity *= -1;
+				Y_position = y;
+				BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+			}
+		}
+
+		public void setNotColliding(Random r)
+        {
+			if (Colliding)
+			{
+				Colliding = false;
+				BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+			}
+		}
 
         public int X_position { get => x_position; set => x_position = value; }
         public int Y_position { get => y_position; set => y_position = value; }

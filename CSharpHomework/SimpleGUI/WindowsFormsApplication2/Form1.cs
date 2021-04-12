@@ -96,11 +96,8 @@ namespace CS4340_5340_HW5
 		{
 			for (int i = 0; i < itemCount; ++i)
 			{
-				if (boxes[i].Colliding)
-				{
-					boxes[i].Colliding = false;
-					boxes[i].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
-				}
+				boxes[i].setNotColliding(r);
+
 				boxes[i].X_position += boxes[i].X_velocity;
 				boxes[i].Y_position += boxes[i].Y_velocity;
 				for (int j = i + 1; j < itemCount; ++j)
@@ -215,30 +212,8 @@ namespace CS4340_5340_HW5
 						}
 					}
 				}
-				if (boxes[i].X_position > pnl.Width - boxes[i].BoxWidth)
-				{
-					boxes[i].X_velocity *= -1;
-					boxes[i].X_position = pnl.Width - boxes[i].BoxWidth;
-					boxes[i].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
-				}
-				else if (boxes[i].X_position < 0)
-				{
-					boxes[i].X_velocity *= -1;
-					boxes[i].X_position = 0;
-					boxes[i].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
-				}
-				if (boxes[i].Y_position > pnl.Height - boxes[i].BoxHeight)
-				{
-					boxes[i].Y_velocity *= -1;
-					boxes[i].Y_position = pnl.Height - boxes[i].BoxHeight;
-					boxes[i].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
-				}
-				else if (boxes[i].Y_position < 0)
-				{
-					boxes[i].Y_velocity *= -1;
-					boxes[i].Y_position = 0;
-					boxes[i].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
-				}
+				// Check collision with panel
+				boxes[i].checkColliding(0, 0, pnl.Width, pnl.Height, r);
 			}
 			label1.Text = itemCount.ToString() + " Items";
 			label1.Refresh();
