@@ -381,15 +381,19 @@ public class SQLUtil {
 		return (object.getOwner() != null ? object.getOwner() + "." : "") + object.getName();
 	}
 
-	public static StringBuilder appendConstraintName(DBConstraint constraint, StringBuilder builder, NameSpec nameSpec) {
-		if (constraint.getName() != null && (nameSpec == NameSpec.ALWAYS || (nameSpec == NameSpec.IF_REPRODUCIBLE && constraint.isNameDeterministic())))
-			builder.append("CONSTRAINT " + quoteNameIfNecessary(constraint.getName()) + ' ');
+	public static StringBuilder appendConstraintName(DBConstraint constraint, StringBuilder builder, NameSpec nameSpec) 
+	{
+		if (nameSpec == NameSpec.ALWAYS || 
+			(nameSpec == NameSpec.IF_REPRODUCIBLE && constraint.isNameDeterministic()))
+		{
+			builder.append(constraintName(constraint));
+		}
 		return builder;
 	}
 	
-	public static void appendConstraintName(DBConstraint constraint, StringBuilder builder) {
-		if (constraint.getName() != null)
-			builder.append("CONSTRAINT " + quoteNameIfNecessary(constraint.getName()) + ' ');
+	public static void appendConstraintName(DBConstraint constraint, StringBuilder builder) 
+	{
+		builder.append(constraintName(constraint));
 	}
 	
 	public static String constraintName(DBConstraint constraint) {
