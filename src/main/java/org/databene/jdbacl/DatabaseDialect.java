@@ -64,7 +64,7 @@ public abstract class DatabaseDialect {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private   final String system;
-    public    final boolean quoteTableNames;
+    private    final boolean quoteTableNames;
     protected final boolean sequenceSupported;
 	private   final DateFormat dateFormat;
 	private   final DateFormat timeFormat;
