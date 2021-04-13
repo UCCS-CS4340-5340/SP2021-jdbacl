@@ -442,12 +442,12 @@ public class SQLUtil {
 			while (tokenizer.nextToken() != StreamTokenizer.TT_EOF) {
 				int ttype = tokenizer.ttype;
 				if (builder.length() > 0 // insert space if this is not the beginning of the string 
-						&& ttype != ')' && ttype != ',' && lastTtype != '(' // no space for brackets and lists
-						&& lastTtype != '.' && ttype != '.' // no space around '.' 
-						&& !(lastTtype == '/' && ttype =='*') // preserve /* if it has not been filtered out 
-						&& !(lastTtype == '-' && ttype =='-') // preserve -- if it has not been filtered out
-						&& !(lastTtype == '*' && ttype =='/')) // preserve */ if it has not been filtered out
+					&& wantSpaceBeforeCharacter(ttype) 
+					&& wantSpaceAfterCharacter(lastTtype)
+					&& !preserveCharacterPair(ttype, lastTtype))
+				{
 					builder.append(' ');
+				}
 				switch (ttype) {
 					case StreamTokenizer.TT_WORD: builder.append(tokenizer.sval); break;
 					case StreamTokenizer.TT_NUMBER: builder.append(renderNumber(tokenizer)); break;
@@ -461,6 +461,25 @@ public class SQLUtil {
 			throw new RuntimeException(e);
 		}
 		return builder.toString();
+	}
+	
+	public static boolean wantSpaceBeforeCharacter(int ttype)
+	{
+		// no space for brackets and lists and no space around '.' 
+		return ttype != ')' && ttype != ',' && ttype != '.';
+	}
+	
+	public static boolean wantSpaceAfterCharacter(int lastTtype)
+	{
+		// no space for brackets and lists and no space around '.' 
+		return lastTtype != '(' && lastTtype != '.';
+	}
+	
+	public static boolean preserveCharacterPair(int ttype, int lastTtype)
+	{
+		return (lastTtype == '/' && ttype =='*') ||  // preserve /* if it has not been filtered out 
+				(lastTtype == '-' && ttype =='-') || // preserve -- if it has not been filtered out
+				(lastTtype == '*' && ttype =='/');   // preserve */ if it has not been filtered out
 	}
 
 	protected static String renderNumber(StreamTokenizer tokenizer) {
