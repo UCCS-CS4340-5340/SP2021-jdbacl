@@ -66,15 +66,23 @@ public class DBUniqueConstraint extends DBConstraint implements MultiColumnObjec
 			columnNames = ArrayUtil.append(columnName, columnNames);
 	}
 	
-	public boolean isIdentical(DBObject other) {
+	public boolean isIdentical(DBObject other) 
+	{
 		if (this == other)
+		{
 			return true;
+		}
 		if (other == null || !(other instanceof DBUniqueConstraint))
+		{
 			return false;
+		}
+		
 		DBUniqueConstraint that = (DBUniqueConstraint) other;
-		return NullSafeComparator.equals(this.name, that.name)
-			&& Arrays.equals(this.columnNames, that.columnNames)
-			&& NullSafeComparator.equals(this.getTable().getName(), that.getTable().getName());
+		boolean sameName = NullSafeComparator.equals(this.name, that.name);
+		boolean sameColumns = Arrays.equals(this.columnNames, that.columnNames);
+		boolean sameTable = NullSafeComparator.equals(this.getTable().getName(), that.getTable().getName());
+		
+		return sameName && sameColumns && sameTable;
 	}
 
 	@Override
