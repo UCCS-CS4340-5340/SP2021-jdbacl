@@ -386,7 +386,7 @@ public final class JDBCDBImporter implements DBMetaDataImporter {
     }
 
 	private void importTableDetails(DefaultDBTable table) {
-	    importColumns(table.getCatalog(), table.getSchema().getName(), table.getName(), null, null);
+	    importColumns(table.getCatalog(), table.getSchema().getName(), table.getName(), null);
 	    importPrimaryKeys(table);
 	    importImportedKeys(table);
 	    importRefererTables(table);
@@ -410,85 +410,118 @@ public final class JDBCDBImporter implements DBMetaDataImporter {
 
     private void importColumns() {
 		if (this.catalogName != null)
-			importColumns(database.getCatalog(this.catalogName), this.schemaName, null, tableNameFilter, errorHandler);
+			importColumns(database.getCatalog(this.catalogName), this.schemaName, null, tableNameFilter);
 		else
 			for (DBCatalog catalog : database.getCatalogs()) {
 				for (DBSchema schema : catalog.getSchemas())
-					importColumns(catalog, schema.getName(), null, tableNameFilter, errorHandler);
+					importColumns(catalog, schema.getName(), null, tableNameFilter);
 			}
     }
+    
+    private boolean isDroppedTable(String tableName)
+    {
+    	return tableName.startsWith("BIN$");
+    }
+    
+    private boolean tablePassesFilter(String tableName, Filter<String> tableFilter)
+    {
+    	return tableFilter == null || tableFilter.accept(tableName);
+    }
+    
+    // Bug fix 3075401: boolean value generation problem in postgresql 8.4
+    private int validateSqlType(int sqlType, String columnType, String databaseProductName)
+    {
+    	boolean columnTypeBool = "bool".equals(columnType.toLowerCase());
+    	boolean isPostgresDB = databaseProductName.toLowerCase().startsWith("postgres");
+    	
+    	if( sqlType == Types.BIT && columnTypeBool && isPostgresDB)
+    	{
+    		return Types.BOOLEAN;
+    	}
+    	
+    	return sqlType;
+    }
 
-    private void importColumns(DBCatalog catalog, String schemaName, String tablePattern, Filter<String> tableFilter, ErrorHandler errorHandler) {
+    private void importColumns(DBCatalog catalog, String schemaName, String tablePattern, Filter<String> tableFilter) {
         String catalogName = catalog.getName();
-        String schemaPattern = (schemaName != null ? schemaName : (catalog.getSchemas().size() == 1 ? catalog.getSchemas().get(0).getName() : null));
+        String catalogSchema = catalog.getSchemas().size() == 1 ? catalog.getSchemas().get(0).getName() : null;
+        String schemaPattern = schemaName != null ? schemaName : catalogSchema;
         LOGGER.debug("Importing columns for " +
         		"catalog " + StringUtil.quoteIfNotNull(catalogName) + ", " +
         		"schemaPattern " + StringUtil.quoteIfNotNull(schemaName) + ", " +
         		"tablePattern '" + StringUtil.quoteIfNotNull(tablePattern) + "'");
         ResultSet columnSet = null;
-        try {
+        try 
+        {
         	columnSet = metaData.getColumns(catalogName, schemaPattern, tablePattern, null);
-	        ResultSetMetaData setMetaData = columnSet.getMetaData();
-	        if (setMetaData.getColumnCount() == 0)
+	        if (columnSet.getMetaData().getColumnCount() == 0)
+	        {
 	            return;
-	        while (columnSet.next()) {
+	        }
+	        while (columnSet.next())
+	        {
 	            String colSchemaName = columnSet.getString(2);
 	            String tableName = columnSet.getString(3);
 	            String columnName = columnSet.getString(4);
-	            if (tableName.startsWith("BIN$") || (tableFilter != null && !tableFilter.accept(tableName))) {
-	            	if (LOGGER.isDebugEnabled())
-	            		LOGGER.debug("ignoring column " + catalogName + "." + colSchemaName + "." + tableName + "." + columnName);
-	                continue;
+	            
+	            DBTable table = catalog.getTable(tableName, false);
+	            if (table == null || isDroppedTable(tableName) || !tablePassesFilter(tableName, tableFilter))
+	            {
+	            	// PostgreSQL returns the columns of indexes, too
+	            	LOGGER.debug("Ignoring column " + catalogName + "." + colSchemaName + "." + tableName + "." + columnName);
+	            	continue; 
 	            }
+	            
 	            int sqlType = columnSet.getInt(5);
 	            String columnType = columnSet.getString(6);
+	            sqlType = validateSqlType(sqlType, columnType, databaseProductName);
+	            
 	            Integer columnSize = columnSet.getInt(7);
-	            if (columnSize == 0) // happens with INTEGER values on HSQLDB
+	            if (columnSize == 0) 
+	            {
+	            	// happens with INTEGER values on HSQLDB
 	            	columnSize = null;
+	            }
+	            
 	            int decimalDigits = columnSet.getInt(9);
 	            boolean nullable = columnSet.getBoolean(11);
 	            String comment = columnSet.getString(12);
 	            String defaultValue = columnSet.getString(13);
-
-	            // Bug fix 3075401: boolean value generation problem in postgresql 8.4
-	            if (sqlType == Types.BIT && "bool".equals(columnType.toLowerCase()) && databaseProductName.toLowerCase().startsWith("postgres")) {
-	            	sqlType = Types.BOOLEAN;
-	            }
 	            
-	            if (LOGGER.isDebugEnabled())
-	            	LOGGER.debug("found column: " + catalogName + ", " + colSchemaName + ", " + tableName + ", "
-	                        + columnName + ", " + sqlType + ", " + columnType + ", " + columnSize + ", " + decimalDigits
-	                        + ", " + nullable + ", " + comment + ", " + defaultValue);
+            	LOGGER.debug("Found column: " + columnSet.toString());
 	
-	            DBTable table = catalog.getTable(tableName, false);
-	            if (table == null) {
-	            	LOGGER.debug("Ignoring column {}.{}", tableName, columnName);
-	            	continue; // PostgreSQL returns the columns of indexes, too
-	            }
 	            DBSchema schema = catalog.getSchema(schemaName);
 	            if (schema != null)
+	            {
 	                table = (DefaultDBTable) schema.getTable(tableName);
+	            }
 
-	            Integer fractionDigits = (decimalDigits > 0 ? decimalDigits : null);
+	            Integer fractionDigits = decimalDigits > 0 ? decimalDigits : null;
 	            DefaultDBColumn column = new DefaultDBColumn(columnName, table, DBDataType.getInstance(sqlType, columnType), columnSize, fractionDigits);
 	            if (!StringUtil.isEmpty(comment))
+	            {
 	                column.setDoc(comment);
-	            if (!StringUtil.isEmpty(defaultValue)) {
+	            }
+	            if (!StringUtil.isEmpty(defaultValue)) 
+	            {
 	                if (!column.getType().isAlpha())
+	                {
 	                    defaultValue = removeBrackets(defaultValue); // some driver adds brackets to number defaults
+	                }
 	                column.setDefaultValue(defaultValue.trim()); // oracle thin driver produces "1 "
 	            }
-	            if (!nullable)
-	                column.setNullable(false);
+	            column.setNullable(nullable);
 	
 	            // not used: importVersionColumnInfo(catalogName, table, metaData);
 	        }
-    	} catch (SQLException e) {
+    	} 
+        catch (SQLException e) 
+        {
     		// possibly we try to access a catalog to which we do not have access rights
-    		if (errorHandler == null)
-    			errorHandler = new ErrorHandler(getClass());
-    		errorHandler.handleError("Error in parsing columns of catalog " + catalog.getName(), e);
-        } finally {
+    		this.errorHandler.handleError("Error in parsing columns of catalog " + catalog.getName(), e);
+        } 
+        finally 
+        {
         	DBUtil.close(columnSet);
         }
     }
