@@ -213,7 +213,7 @@ namespace CS4340_5340_HW5
 					}
 				}
 				// Check collision with panel
-				boxes[i].checkColliding(0, 0, pnl.Width, pnl.Height, r);
+				boxes[i].checkBorderCollision(pnl.Bounds.Size, r);
 			}
 			label1.Text = itemCount.ToString() + " Items";
 			label1.Refresh();
