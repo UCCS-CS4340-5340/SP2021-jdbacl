@@ -100,101 +100,19 @@ namespace CS4340_5340_HW5
 						dY = boxes[i].BoxHeight - dY;
 						if (dX < dY)
 						{
-							if (boxes[i].X_position < boxes[j].X_position)
-							{
-								switch (boxes[i].X_velocity)
-								{
-									case -1:
-										boxes[i].X_velocity = 1;
-										break;
-									case 1:
-										boxes[i].X_velocity = -1;
-										break;
-								}
-								switch (boxes[j].X_velocity)
-								{
-									case -1:
-										boxes[j].X_velocity = 1;
-										break;
-									case 1:
-										boxes[j].X_velocity = -1;
-										break;
-								}
-								boxes[i].X_position += boxes[i].X_velocity; // * dX;
-								boxes[j].X_position += boxes[j].X_velocity; // * dX;
-							}
-							else
-							{
-								switch (boxes[i].X_velocity)
-								{
-									case -1:
-										boxes[i].X_velocity = 1;
-										break;
-									case 1:
-										boxes[i].X_velocity = -1;
-										break;
-								}
-								switch (boxes[j].X_velocity)
-								{
-									case -1:
-										boxes[j].X_velocity = 1;
-										break;
-									case 1:
-										boxes[j].X_velocity = -1;
-										break;
-								}
-								boxes[j].X_position += boxes[j].X_velocity; // * dX;
-								boxes[i].X_position += boxes[i].X_velocity; // * dX;
-							}
+							boxes[i].X_velocity *= -1;
+							boxes[j].X_velocity *= -1;
+
+							boxes[i].X_position += boxes[i].X_velocity; // * dX;
+							boxes[j].X_position += boxes[j].X_velocity; // * dX;
 						}
 						else
 						{
-							if (boxes[i].Y_position < boxes[j].Y_position)
-							{
-								switch (boxes[i].Y_velocity)
-								{
-									case -1:
-										boxes[i].Y_velocity = 1;
-										break;
-									case 1:
-										boxes[i].Y_velocity = -1;
-										break;
-								}
-								switch (boxes[j].Y_velocity)
-								{
-									case -1:
-										boxes[j].Y_velocity = 1;
-										break;
-									case 1:
-										boxes[j].Y_velocity = -1;
-										break;
-								}
-								boxes[i].Y_position += boxes[i].Y_velocity; // * dY;
-								boxes[j].Y_position += boxes[j].Y_velocity; //* dY;
-							}
-							else
-							{
-								switch (boxes[i].Y_velocity)
-								{
-									case -1:
-										boxes[i].Y_velocity = 1;
-										break;
-									case 1:
-										boxes[i].Y_velocity = -1;
-										break;
-								}
-								switch (boxes[j].Y_velocity)
-								{
-									case -1:
-										boxes[j].Y_velocity = 1;
-										break;
-									case 1:
-										boxes[j].Y_velocity = -1;
-										break;
-								}
-								boxes[j].Y_position += boxes[j].Y_velocity; // * dY;
-								boxes[i].Y_position += boxes[i].Y_velocity; // * dY;
-							}
+							boxes[i].Y_velocity *= -1;
+							boxes[j].Y_velocity *= -1;
+
+							boxes[i].Y_position += boxes[i].Y_velocity; // * dY;
+							boxes[j].Y_position += boxes[j].Y_velocity; //* dY;
 						}
 					}
 				}
