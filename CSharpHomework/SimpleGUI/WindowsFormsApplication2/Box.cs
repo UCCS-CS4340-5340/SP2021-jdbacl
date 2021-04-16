@@ -41,6 +41,11 @@ namespace CS4340_5340_HW5
 			colliding = false;
 		}
 
+		public void updatePosition(Point location)
+		{
+			m_bounds.Location = location;
+		}
+
 		public void checkBoxCollision(Box other)
         {
 			int dX = Math.Abs(this.X_position - other.X_position);

@@ -52,8 +52,8 @@ namespace CS4340_5340_HW5
 			{
 				return;
 			}
-			boxes[itemCount].X_position = ((MouseEventArgs)e).X;
-			boxes[itemCount].Y_position = ((MouseEventArgs)e).Y;
+
+			boxes[itemCount].updatePosition(((MouseEventArgs)e).Location);
 
 			Graphics gr = pnl.CreateGraphics();
 			gr.FillRectangle(new SolidBrush(boxes[itemCount].BoxColor),
