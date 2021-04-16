@@ -129,7 +129,7 @@ namespace CS4340_5340_HW5
 				colliding = true;
 				setRed();
 			}
-			else
+			else if(colliding)
 			{
 				colliding = false;
 				changeColor();
