@@ -46,6 +46,15 @@ namespace CS4340_5340_HW5
 			pnl.Refresh();
 		}
 
+		private void paintBox(Graphics gr, Box box)
+        {
+			gr.FillRectangle(new SolidBrush(box.BoxColor),
+							 box.X_position,
+							 box.Y_position,
+							 box.BoxWidth,
+							 box.BoxHeight);
+		}
+
 		private void panelClicked(object s, EventArgs e)
 		{
 			if (itemCount == 1000)
@@ -56,11 +65,8 @@ namespace CS4340_5340_HW5
 			boxes[itemCount].updatePosition(((MouseEventArgs)e).Location);
 
 			Graphics gr = pnl.CreateGraphics();
-			gr.FillRectangle(new SolidBrush(boxes[itemCount].BoxColor),
-											boxes[itemCount].X_position,
-											boxes[itemCount].Y_position,
-											boxes[itemCount].BoxWidth,
-											boxes[itemCount].BoxHeight);
+			paintBox(gr, boxes[itemCount]);
+
 			itemCount++;
 			pnl.Refresh();
 		}
@@ -70,11 +76,7 @@ namespace CS4340_5340_HW5
 			Graphics gr = pnl.CreateGraphics();
 			for (int i = 0; i < itemCount; ++i)
 			{
-				gr.FillRectangle(new SolidBrush(boxes[i].BoxColor),
-												boxes[i].X_position,
-												boxes[i].Y_position,
-												boxes[i].BoxWidth,
-												boxes[i].BoxHeight);
+				paintBox(gr, boxes[i]);
 			}
 		}
 
