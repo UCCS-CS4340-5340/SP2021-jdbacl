@@ -13,12 +13,25 @@ namespace CS4340_5340_HW5
 
 		private Random m_random;
 
-		public Box(Random random)
+		public Box(Random random, Size bounds) : this(random)
         {
-			m_bounds = new Rectangle(new Point(0,0), new Size(0,0));
+			Size size = new Size(20, 20);
+			Point location = new Point((int)(random.NextDouble() * (bounds.Width - size.Width)),
+									   (int)(random.NextDouble() * (bounds.Height - size.Height)));
+			m_bounds = new Rectangle(location, size);
+		}
 
-			x_velocity = 0;
-			y_velocity = 0;
+		public Box(Random random, Point location) : this(random)
+		{
+			Size size = new Size(20, 20);
+			m_bounds = new Rectangle(location, size);
+		}
+
+		// Base constructor for others to build on
+		private Box(Random random)
+        {
+			x_velocity = random.Next(2) * 2 - 1;
+			y_velocity = random.Next(2) * 2 - 1;
 
 			m_random = random;
 

@@ -17,16 +17,16 @@ namespace CS4340_5340_HW5
 
 		public Form1()
 		{
-			for(int i = 0; i < 1000; ++i)
-            {
-				boxes[i] = new Box(r);
-            }
-
 			InitializeComponent();
 			this.SetBounds((Screen.GetBounds(this).Width / 2) - (this.Width / 2),
 						   (Screen.GetBounds(this).Height / 2) - (this.Height / 2),
 						   this.Width, this.Height, BoundsSpecified.Location);
 			this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+
+			for (int i = 0; i < 1000; ++i)
+			{
+				boxes[i] = new Box(r, pnl.Bounds.Size);
+			}
 		}
 		protected override CreateParams CreateParams
 		{
@@ -40,35 +40,21 @@ namespace CS4340_5340_HW5
 
 		private void addItemsClicked(object s, EventArgs e)
 		{
-			for (int i = 0; i < 100 && itemCount < 1000; ++i)
-			{
-				boxes[itemCount].BoxWidth = 20;
-				boxes[itemCount].BoxHeight = 20;
-				boxes[itemCount].X_position 
-					= (int)(r.NextDouble() * (pnl.Width - boxes[itemCount].BoxWidth));
-				boxes[itemCount].Y_position 
-					= (int)(r.NextDouble() * (pnl.Height - boxes[itemCount].BoxHeight));
-				boxes[itemCount].X_velocity = r.Next(2) * 2 - 1;
-				boxes[itemCount].Y_velocity = r.Next(2) * 2 - 1;
-				boxes[itemCount].Colliding = false;
-				boxes[itemCount].changeColor();
-				itemCount++;
-			}
+			itemCount += 100;
+			itemCount = itemCount > 1000 ? 1000 : itemCount;
+
 			pnl.Refresh();
 		}
 
 		private void panelClicked(object s, EventArgs e)
 		{
 			if (itemCount == 1000)
+			{
 				return;
+			}
 			boxes[itemCount].X_position = ((MouseEventArgs)e).X;
 			boxes[itemCount].Y_position = ((MouseEventArgs)e).Y;
-			boxes[itemCount].X_velocity = r.Next(2) * 2 - 1;
-			boxes[itemCount].Y_velocity = r.Next(2) * 2 - 1;
-			boxes[itemCount].BoxWidth = 20;
-			boxes[itemCount].BoxHeight = 20;
-			boxes[itemCount].Colliding = false;
-			boxes[itemCount].changeColor();
+
 			Graphics gr = pnl.CreateGraphics();
 			gr.FillRectangle(new SolidBrush(boxes[itemCount].BoxColor),
 											boxes[itemCount].X_position,
