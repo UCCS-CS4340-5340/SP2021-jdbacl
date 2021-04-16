@@ -84,8 +84,7 @@ namespace CS4340_5340_HW5
 			{
 				boxes[i].setColliding(false);
 
-				boxes[i].X_position += boxes[i].X_velocity;
-				boxes[i].Y_position += boxes[i].Y_velocity;
+				boxes[i].updatePosition();
 				for (int j = i + 1; j < itemCount; ++j)
 				{
 					int dX = Math.Abs(boxes[i].X_position - boxes[j].X_position);
@@ -102,16 +101,16 @@ namespace CS4340_5340_HW5
 							boxes[i].X_velocity *= -1;
 							boxes[j].X_velocity *= -1;
 
-							boxes[i].X_position += boxes[i].X_velocity; // * dX;
-							boxes[j].X_position += boxes[j].X_velocity; // * dX;
+							boxes[i].updateXPosition(); // * dX;
+							boxes[j].updateXPosition(); // * dX;
 						}
 						else
 						{
 							boxes[i].Y_velocity *= -1;
 							boxes[j].Y_velocity *= -1;
 
-							boxes[i].Y_position += boxes[i].Y_velocity; // * dY;
-							boxes[j].Y_position += boxes[j].Y_velocity; //* dY;
+							boxes[i].updateYPosition(); // * dY;
+							boxes[j].updateYPosition();  //* dY;
 						}
 					}
 				}

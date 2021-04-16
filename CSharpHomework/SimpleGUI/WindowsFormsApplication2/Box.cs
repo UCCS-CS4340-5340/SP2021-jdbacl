@@ -71,28 +71,43 @@ namespace CS4340_5340_HW5
 			}
 		}
 
+		public void updatePosition()
+        {
+			updateXPosition();
+			updateYPosition();
+		}
+
+		public void updateXPosition()
+        {
+			m_bounds.X += x_velocity;
+		}
+
+		public void updateYPosition()
+        {
+			m_bounds.Y += y_velocity;
+		}
+
 		public void setColliding(bool isColliding)
         {
 			if (isColliding)
             {
-				Colliding = true;
+				colliding = true;
 				setRed();
 			}
 			else
 			{
-				Colliding = false;
+				colliding = false;
 				changeColor();
 			}
 		}
 		
 		public int X_position { get => m_bounds.X; set => m_bounds.X = value; }
 		public int Y_position { get => m_bounds.Y; set => m_bounds.Y = value; }
-		public int BoxWidth { get => m_bounds.Width; set => m_bounds.Width = value; }
-		public int BoxHeight { get => m_bounds.Height; set => m_bounds.Height = value; }
+		public int BoxWidth { get => m_bounds.Width; }
+		public int BoxHeight { get => m_bounds.Height; }
 		public Color BoxColor { get => boxColor; }
 		public int X_velocity { get => x_velocity; set => x_velocity = value; }
         public int Y_velocity { get => y_velocity; set => y_velocity = value; }
-        public bool Colliding { get => colliding; set => colliding = value; }
 
 		private void changeColor()
         {
