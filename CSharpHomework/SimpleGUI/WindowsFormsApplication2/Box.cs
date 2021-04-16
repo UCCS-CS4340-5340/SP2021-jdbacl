@@ -41,6 +41,36 @@ namespace CS4340_5340_HW5
 			colliding = false;
 		}
 
+		public void checkBoxCollision(Box other)
+        {
+			int dX = Math.Abs(this.X_position - other.X_position);
+			int dY = Math.Abs(this.Y_position - other.Y_position);
+			if (dX < this.BoxWidth && dY < this.BoxHeight)
+			{
+				this.setColliding(true);
+				other.setColliding(true);
+
+				dX = this.BoxWidth - dX;
+				dY = other.BoxHeight - dY;
+				if (dX < dY)
+				{
+					this.X_velocity *= -1;
+					other.X_velocity *= -1;
+
+					this.updateXPosition(); // * dX;
+					other.updateXPosition(); // * dX;
+				}
+				else
+				{
+					this.Y_velocity *= -1;
+					other.Y_velocity *= -1;
+
+					this.updateYPosition(); // * dY;
+					other.updateYPosition();  //* dY;
+				}
+			}
+		}
+
 		public void checkBorderCollision(Size rectSize)
         {
 			// Check X

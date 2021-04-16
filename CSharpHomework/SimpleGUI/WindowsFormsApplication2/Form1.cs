@@ -83,40 +83,16 @@ namespace CS4340_5340_HW5
 			for (int i = 0; i < itemCount; ++i)
 			{
 				boxes[i].setColliding(false);
-
 				boxes[i].updatePosition();
+
 				for (int j = i + 1; j < itemCount; ++j)
 				{
-					int dX = Math.Abs(boxes[i].X_position - boxes[j].X_position);
-					int dY = Math.Abs(boxes[i].Y_position - boxes[j].Y_position);
-					if (dX < boxes[i].BoxWidth && dY < boxes[i].BoxHeight)
-					{
-						boxes[i].setColliding(true);
-						boxes[j].setColliding(true);
-
-						dX = boxes[i].BoxWidth - dX;
-						dY = boxes[i].BoxHeight - dY;
-						if (dX < dY)
-						{
-							boxes[i].X_velocity *= -1;
-							boxes[j].X_velocity *= -1;
-
-							boxes[i].updateXPosition(); // * dX;
-							boxes[j].updateXPosition(); // * dX;
-						}
-						else
-						{
-							boxes[i].Y_velocity *= -1;
-							boxes[j].Y_velocity *= -1;
-
-							boxes[i].updateYPosition(); // * dY;
-							boxes[j].updateYPosition();  //* dY;
-						}
-					}
+					boxes[i].checkBoxCollision(boxes[j]);
 				}
 				// Check collision with panel
 				boxes[i].checkBorderCollision(pnl.Bounds.Size);
 			}
+
 			label1.Text = itemCount.ToString() + " Items";
 			label1.Refresh();
 			pnl.Refresh();
