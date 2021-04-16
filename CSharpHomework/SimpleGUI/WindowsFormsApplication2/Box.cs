@@ -5,59 +5,65 @@ namespace CS4340_5340_HW5
 {
     class Box
     {
-		Rectangle m_bounds;
+		private Rectangle m_bounds;
 		private int x_velocity;
 		private int y_velocity;
 		private Color boxColor;
 		private bool colliding;
 
-		public Box()
+		private Random m_random;
+
+		public Box(Random random)
         {
 			m_bounds = new Rectangle(new Point(0,0), new Size(0,0));
 
 			x_velocity = 0;
 			y_velocity = 0;
 
-			boxColor = new Color();
+			m_random = random;
+
+			// Initialize color after random
+			changeColor();
+
 			colliding = false;
 		}
 
-		public void checkColliding(Size rectSize, Random r)
+		public void checkBorderCollision(Size rectSize)
         {
 			// Check X
 			if (m_bounds.X > rectSize.Width - m_bounds.Width)
 			{
 				X_velocity *= -1;
 				m_bounds.X = rectSize.Width - m_bounds.Width;
-				BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+				changeColor();
 			}
-			else if (m_bounds.Location.X < 0)//rect.X)
+			else if (m_bounds.Location.X < 0)
 			{
 				X_velocity *= -1;
 				m_bounds.X = 0;
-				BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+				changeColor();
 			}
 			// Check Y
 			if (m_bounds.Location.Y > rectSize.Height - m_bounds.Height)
 			{
 				Y_velocity *= -1;
 				m_bounds.Y = rectSize.Height - m_bounds.Size.Height;
-				BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+				changeColor();
 			}
-			else if (m_bounds.Location.Y < 0)//rect.Y)
+			else if (m_bounds.Location.Y < 0)
 			{
 				Y_velocity *= -1;
 				m_bounds.Y = 0;
-				BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+				changeColor();
 			}
 		}
 
-		public void setNotColliding(Random r)
+		public void setNotColliding()
         {
 			if (Colliding)
 			{
 				Colliding = false;
-				BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+				changeColor();
 			}
 		}
 		
@@ -65,10 +71,19 @@ namespace CS4340_5340_HW5
 		public int Y_position { get => m_bounds.Y; set => m_bounds.Y = value; }
 		public int BoxWidth { get => m_bounds.Width; set => m_bounds.Width = value; }
 		public int BoxHeight { get => m_bounds.Height; set => m_bounds.Height = value; }
-
+		public Color BoxColor { get => boxColor; }
 		public int X_velocity { get => x_velocity; set => x_velocity = value; }
         public int Y_velocity { get => y_velocity; set => y_velocity = value; }
-        public Color BoxColor { get => boxColor; set => boxColor = value; }
         public bool Colliding { get => colliding; set => colliding = value; }
+
+		public void changeColor()
+        {
+			boxColor = Color.FromArgb(m_random.Next(256), m_random.Next(256), m_random.Next(256));
+		}
+
+		public void setRed()
+        {
+			boxColor = Color.Red;
+        }
     }
 }

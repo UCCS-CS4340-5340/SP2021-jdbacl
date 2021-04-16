@@ -19,7 +19,7 @@ namespace CS4340_5340_HW5
 		{
 			for(int i = 0; i < 1000; ++i)
             {
-				boxes[i] = new Box();
+				boxes[i] = new Box(r);
             }
 
 			InitializeComponent();
@@ -51,7 +51,7 @@ namespace CS4340_5340_HW5
 				boxes[itemCount].X_velocity = r.Next(2) * 2 - 1;
 				boxes[itemCount].Y_velocity = r.Next(2) * 2 - 1;
 				boxes[itemCount].Colliding = false;
-				boxes[itemCount].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+				boxes[itemCount].changeColor();
 				itemCount++;
 			}
 			pnl.Refresh();
@@ -68,7 +68,7 @@ namespace CS4340_5340_HW5
 			boxes[itemCount].BoxWidth = 20;
 			boxes[itemCount].BoxHeight = 20;
 			boxes[itemCount].Colliding = false;
-			boxes[itemCount].BoxColor = Color.FromArgb(r.Next(256), r.Next(256), r.Next(256));
+			boxes[itemCount].changeColor();
 			Graphics gr = pnl.CreateGraphics();
 			gr.FillRectangle(new SolidBrush(boxes[itemCount].BoxColor),
 											boxes[itemCount].X_position,
@@ -96,7 +96,7 @@ namespace CS4340_5340_HW5
 		{
 			for (int i = 0; i < itemCount; ++i)
 			{
-				boxes[i].setNotColliding(r);
+				boxes[i].setNotColliding();
 
 				boxes[i].X_position += boxes[i].X_velocity;
 				boxes[i].Y_position += boxes[i].Y_velocity;
@@ -108,8 +108,8 @@ namespace CS4340_5340_HW5
 					{
 						boxes[i].Colliding = true;
 						boxes[j].Colliding = true;
-						boxes[j].BoxColor = Color.Red;
-						boxes[i].BoxColor = Color.Red;
+						boxes[j].setRed();
+						boxes[i].setRed();
 						dX = boxes[i].BoxWidth - dX;
 						dY = boxes[i].BoxHeight - dY;
 						if (dX < dY)
@@ -213,7 +213,7 @@ namespace CS4340_5340_HW5
 					}
 				}
 				// Check collision with panel
-				boxes[i].checkBorderCollision(pnl.Bounds.Size, r);
+				boxes[i].checkBorderCollision(pnl.Bounds.Size);
 			}
 			label1.Text = itemCount.ToString() + " Items";
 			label1.Refresh();
