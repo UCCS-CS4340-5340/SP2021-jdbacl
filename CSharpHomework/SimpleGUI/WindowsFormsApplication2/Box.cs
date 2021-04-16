@@ -71,9 +71,14 @@ namespace CS4340_5340_HW5
 			}
 		}
 
-		public void setNotColliding()
+		public void setColliding(bool isColliding)
         {
-			if (Colliding)
+			if (isColliding)
+            {
+				Colliding = true;
+				setRed();
+			}
+			else
 			{
 				Colliding = false;
 				changeColor();
@@ -89,12 +94,12 @@ namespace CS4340_5340_HW5
         public int Y_velocity { get => y_velocity; set => y_velocity = value; }
         public bool Colliding { get => colliding; set => colliding = value; }
 
-		public void changeColor()
+		private void changeColor()
         {
 			boxColor = Color.FromArgb(m_random.Next(256), m_random.Next(256), m_random.Next(256));
 		}
 
-		public void setRed()
+		private void setRed()
         {
 			boxColor = Color.Red;
         }

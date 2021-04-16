@@ -82,7 +82,7 @@ namespace CS4340_5340_HW5
 		{
 			for (int i = 0; i < itemCount; ++i)
 			{
-				boxes[i].setNotColliding();
+				boxes[i].setColliding(false);
 
 				boxes[i].X_position += boxes[i].X_velocity;
 				boxes[i].Y_position += boxes[i].Y_velocity;
@@ -92,10 +92,9 @@ namespace CS4340_5340_HW5
 					int dY = Math.Abs(boxes[i].Y_position - boxes[j].Y_position);
 					if (dX < boxes[i].BoxWidth && dY < boxes[i].BoxHeight)
 					{
-						boxes[i].Colliding = true;
-						boxes[j].Colliding = true;
-						boxes[j].setRed();
-						boxes[i].setRed();
+						boxes[i].setColliding(true);
+						boxes[j].setColliding(true);
+
 						dX = boxes[i].BoxWidth - dX;
 						dY = boxes[i].BoxHeight - dY;
 						if (dX < dY)
