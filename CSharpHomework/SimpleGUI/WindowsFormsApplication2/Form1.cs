@@ -11,7 +11,8 @@ namespace CS4340_5340_HW5
 {
 	public partial class Form1 : Form
 	{
-		Box[] boxes = new Box[1000];
+		static int MAX_ITEMS = 1000;
+		Box[] boxes = new Box[MAX_ITEMS];
 		int itemCount = 0;
 		Random r = new Random();
 
@@ -23,7 +24,7 @@ namespace CS4340_5340_HW5
 						   this.Width, this.Height, BoundsSpecified.Location);
 			this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
-			for (int i = 0; i < 1000; ++i)
+			for (int i = 0; i < MAX_ITEMS; ++i)
 			{
 				boxes[i] = new Box(r, pnl.Bounds.Size);
 			}
@@ -41,7 +42,7 @@ namespace CS4340_5340_HW5
 		private void addItemsClicked(object s, EventArgs e)
 		{
 			itemCount += 100;
-			itemCount = itemCount > 1000 ? 1000 : itemCount;
+			itemCount = itemCount > MAX_ITEMS ? MAX_ITEMS : itemCount;
 
 			pnl.Refresh();
 		}
@@ -57,7 +58,7 @@ namespace CS4340_5340_HW5
 
 		private void panelClicked(object s, EventArgs e)
 		{
-			if (itemCount == 1000)
+			if (itemCount == MAX_ITEMS)
 			{
 				return;
 			}
