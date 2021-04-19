@@ -36,6 +36,16 @@ namespace CS4340_5340_HW5
 			m_bounds.Location = location;
 		}
 
+		private void changeXDirection()
+        {
+			x_velocity *= -1;
+		}
+
+		private void changeYDirection()
+		{
+			y_velocity *= -1;
+		}
+
 		public void checkBoxCollision(Box other)
         {
 			int dX = Math.Abs(this.X_position - other.X_position);
@@ -49,16 +59,16 @@ namespace CS4340_5340_HW5
 				dY = other.BoxHeight - dY;
 				if (dX < dY)
 				{
-					this.X_velocity *= -1;
-					other.X_velocity *= -1;
+					this.changeXDirection();
+					other.changeXDirection();
 
 					this.updateXPosition(); // * dX;
 					other.updateXPosition(); // * dX;
 				}
 				else
 				{
-					this.Y_velocity *= -1;
-					other.Y_velocity *= -1;
+					this.changeYDirection();
+					other.changeYDirection();
 
 					this.updateYPosition(); // * dY;
 					other.updateYPosition();  //* dY;
@@ -71,26 +81,26 @@ namespace CS4340_5340_HW5
 			// Check X
 			if (m_bounds.X > rectSize.Width - m_bounds.Width)
 			{
-				X_velocity *= -1;
+				changeXDirection();
 				m_bounds.X = rectSize.Width - m_bounds.Width;
 				changeColor();
 			}
 			else if (m_bounds.Location.X < 0)
 			{
-				X_velocity *= -1;
+				changeXDirection();
 				m_bounds.X = 0;
 				changeColor();
 			}
 			// Check Y
 			if (m_bounds.Location.Y > rectSize.Height - m_bounds.Height)
 			{
-				Y_velocity *= -1;
+				changeYDirection();
 				m_bounds.Y = rectSize.Height - m_bounds.Size.Height;
 				changeColor();
 			}
 			else if (m_bounds.Location.Y < 0)
 			{
-				Y_velocity *= -1;
+				changeYDirection();
 				m_bounds.Y = 0;
 				changeColor();
 			}
@@ -102,12 +112,12 @@ namespace CS4340_5340_HW5
 			updateYPosition();
 		}
 
-		public void updateXPosition()
+		private void updateXPosition()
         {
 			m_bounds.X += x_velocity;
 		}
 
-		public void updateYPosition()
+		private void updateYPosition()
         {
 			m_bounds.Y += y_velocity;
 		}
@@ -126,13 +136,13 @@ namespace CS4340_5340_HW5
 			}
 		}
 		
-		public int X_position { get => m_bounds.X; set => m_bounds.X = value; }
-		public int Y_position { get => m_bounds.Y; set => m_bounds.Y = value; }
+		public int X_position { get => m_bounds.X; }
+		public int Y_position { get => m_bounds.Y; }
 		public int BoxWidth { get => m_bounds.Width; }
 		public int BoxHeight { get => m_bounds.Height; }
 		public Color BoxColor { get => boxColor; }
-		public int X_velocity { get => x_velocity; set => x_velocity = value; }
-        public int Y_velocity { get => y_velocity; set => y_velocity = value; }
+		public int X_velocity { get => x_velocity; }
+        public int Y_velocity { get => y_velocity; }
 
 		private void changeColor()
         {
